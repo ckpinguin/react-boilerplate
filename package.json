@@ -15,6 +15,7 @@
     "react-dom": "^15.4.1"
   },
   "devDependencies": {
+    "autoprefixer": "^6.5.3",
     "babel-cli": "^6.18.0",
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
