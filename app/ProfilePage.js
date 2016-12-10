@@ -1,6 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import NavBar from './components/NavBar';
+
 /**
  * Our profile page class (example)
  * @constructor
