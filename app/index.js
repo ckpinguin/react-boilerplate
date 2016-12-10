@@ -1,9 +1,20 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var NavBar = require('./components/Navbar')
+import React from 'react';
+import ReactDOM from 'react-dom';
+import NavBar from './components/NavBar';
 
-var ProfilePage = React.createClass({
-  render: function () {
+/**
+ * Our profile page class (example)
+ * @constructor
+ */
+class ProfilePage extends React.Component {
+  constructor() {
+    super();
+    /* No more auto-binding in ES6! If we need
+    prebinding, it should be done here */
+    //this.tick = this.tick.bind(this);
+  }
+
+  render () {
     return (
       <div>
         <NavBar />
@@ -13,7 +24,7 @@ var ProfilePage = React.createClass({
       </div>
     );
   }
-});
+}
 
 ReactDOM.render(
   <ProfilePage />,
