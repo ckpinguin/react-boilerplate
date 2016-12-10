@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import NavBar from './components/NavBar';
-
 /**
  * Our profile page class (example)
  * @constructor
  */
-class ProfilePage extends React.Component {
+export default class ProfilePage extends React.Component {
   constructor() {
     super();
     /* No more auto-binding in ES6! If we need
@@ -25,8 +24,3 @@ class ProfilePage extends React.Component {
     );
   }
 }
-
-ReactDOM.render(
-  <ProfilePage />,
-  document.getElementById('app')
-);
