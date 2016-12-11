@@ -10,5 +10,5 @@ pipelines:
     - step:
         script: # Modify the commands below to build your repository.
           - npm install
-          - npm test
+          - npm run build
           #- npm start # this would never return (starts :8080 server)
