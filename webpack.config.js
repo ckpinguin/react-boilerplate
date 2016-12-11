@@ -1,21 +1,39 @@
-var autoprefixer = require('autoprefixer');
-var HTMLWebpackPlugin = require('html-webpack-plugin');
-var path = require('path');
+const path = require('path');
+const HTMLWebpackPlugin = require('html-webpack-plugin');
+const merge = require('webpack-merge');
+const validate = require('webpack-validator');
+const autoprefixer = require('autoprefixer');
+const poststylus = require('poststylus');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
-  template: path.resolve(__dirname + '/public/index.html'),
-  filename: 'index.html'
-});
+const PATHS = {
+  src: path.join(__dirname, 'src'),
+  build: path.join(__dirname, 'build')
+};
 
-module.exports = {
+const common = {
+  // Entry accepts a path or an object of entries.
+  // We'll be using the latter form given it's
+  // convenient with more complex configurations.
   entry: [
-    require.resolve('react-dev-utils/webpackHotDevClient'),
     path.join(__dirname, '/src/index.js')
   ],
+  devServer: {
+    contentBase: "./public"
+    },
+  // entry: {
+  //   app: PATHS.src
+  // },
   output: {
     path: path.join(__dirname, '/build'),
     filename: 'static/js/bundle.js'
   },
+  plugins: [
+    new HTMLWebpackPlugin({
+      template: path.resolve(__dirname + '/public/index.html'),
+      filename: 'index.html'
+    }),
+  ],
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
@@ -23,8 +41,8 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         loader: 'eslint',
-        include: path.join(__dirname, '/src/'),
-      },
+        include: path.join(__dirname, '/src/')
+      }//,
       // {
       //   test: /\.styl$/,
       //   loader: 'css-loader!stylus-loader?paths=node_modules/bootstrap-stylus/stylus/'
@@ -46,18 +64,13 @@ module.exports = {
       // smaller than specified limit in bytes as data URLs to avoid requests.
       // A missing `test` is equivalent to a match.
       {
-        exclude: [
-          /\.html$/,
-          /\.(js|jsx)$/,
-          /\.css$/,
-          /\.json$/,
-          /\.svg$/
-        ],
+        exclude: [ /\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/ ],
         loader: 'url',
         query: {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]'
-        }
+        },
+        test: /.+/
       },
       // Process JS with Babel.
       {
@@ -78,15 +91,15 @@ module.exports = {
       // "style" loader turns CSS into JS modules that inject <style> tags.
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
-      {
-        test: /\.css$/,
-        loader: 'style!css?importLoaders=1!postcss!stylus'
-      },
+      { test: /\.html$/, loader: 'html' },
+      { test: /\.css$/, loader: 'style!css?importLoaders=1!postcss' },
+      // stylus is handled in differently in prod/dev
+      //{ test: /\.styl$/, loader: 'style!css!postcss!stylus' },
+
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
       {
-        test: /\.json$/,
-        loader: 'json'
+        test: /\.json$/, loader: 'json'
       },
       // "file" loader for svg
       {
@@ -97,6 +110,65 @@ module.exports = {
         }
       }
     ]
-  },
-  plugins: [HTMLWebpackPluginConfig]
+  }
 };
+
+const dev = {
+  entry: [
+    require.resolve('react-dev-utils/webpackHotDevClient')
+  ],
+  module: {
+    loaders: [
+      { test: /\.styl$/, loader: 'style-loader!css-loader!postcss-loader!stylus-loader' },
+
+    ]
+  },
+  stylus: {
+    use: [poststylus(['autoprefixer', 'postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
+  },
+};
+
+const prod = {
+  module: {
+    preLoaders: [
+      {
+        test: /\.(js|jsx)$/,
+        loader: 'eslint',
+        include: path.join(__dirname, '/src/')
+      }
+    ],
+    loaders: [
+      {
+        test: /\.styl$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!stylus-loader')
+        // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
+      }
+    ]
+  },
+  stylus: {
+    use: [poststylus(['autoprefixer', 'postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
+  },
+  plugins: [
+    new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
+  ]
+};
+
+var config;
+
+// Detect how npm is run and branch based on that
+switch(process.env.npm_lifecycle_event) {
+  case 'build':
+    config = merge(common, prod);
+    break;
+  default:
+    config = merge(common, dev);
+}
+
+/** Extending the webpack-validator schema for special config stuff **/
+const Joi = require('webpack-validator').Joi
+// This joi schema will be `Joi.concat`-ed with the internal schema
+const validatorSchemaExtension = Joi.object({
+  // this would just allow the property and doesn't perform any additional validation
+  stylus: Joi.any()
+})
+
+module.exports = validate(config, { schemaExtension: validatorSchemaExtension });
