@@ -8,7 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const PATHS = {
   src: path.join(__dirname, 'src'),
-  build: path.join(__dirname, 'build')
+  dist: path.join(__dirname, 'dist')
 };
 
 const common = {
@@ -18,22 +18,23 @@ const common = {
   entry: [
     path.join(__dirname, '/src/index.js')
   ],
-  devServer: {
-    contentBase: "./public"
-    },
-  // entry: {
-  //   app: PATHS.src
-  // },
   output: {
-    path: path.join(__dirname, '/build'),
+    path: path.join(__dirname, '/dist'),
     filename: 'static/js/bundle.js'
   },
   plugins: [
     new HTMLWebpackPlugin({
       template: path.resolve(__dirname + '/public/index.html'),
-      filename: 'index.html'
-    }),
+      filename: 'index.html' // in prod-mode, this file lands in the dist folder
+    })
   ],
+  stats: {
+   colors: true,
+   reasons: true
+  },
+  devServer: {
+    contentBase: './public'
+  },
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
@@ -42,11 +43,7 @@ const common = {
         test: /\.(js|jsx)$/,
         loader: 'eslint',
         include: path.join(__dirname, '/src/')
-      }//,
-      // {
-      //   test: /\.styl$/,
-      //   loader: 'css-loader!stylus-loader?paths=node_modules/bootstrap-stylus/stylus/'
-      // }
+      }
     ],
     loaders: [
       // Default loader: load all assets that are not handled
@@ -63,15 +60,15 @@ const common = {
       // "url" loader works like "file" loader except that it embeds assets
       // smaller than specified limit in bytes as data URLs to avoid requests.
       // A missing `test` is equivalent to a match.
-      {
-        exclude: [ /\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/ ],
-        loader: 'url',
-        query: {
-          limit: 10000,
-          name: 'static/media/[name].[hash:8].[ext]'
-        },
-        test: /.+/
-      },
+      // {
+      //   exclude: [ /\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/ ],
+      //   loader: 'url',
+      //   query: {
+      //     limit: 10000,
+      //     name: 'static/media/[name].[hash:8].[ext]'
+      //   },
+      //   test: /.+/
+      // },
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
@@ -86,13 +83,17 @@ const common = {
           cacheDirectory: true
         }
       },
+      {
+        test: /\.(pug|jade)$/,
+        include: path.join(__dirname, '/src/'),
+        loader: 'pug'
+      },
       // "postcss" loader applies autoprefixer to our CSS.
       // "css" loader resolves paths in CSS and adds assets as dependencies.
       // "style" loader turns CSS into JS modules that inject <style> tags.
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
       { test: /\.html$/, loader: 'html' },
-      { test: /\.css$/, loader: 'style!css?importLoaders=1!postcss' },
       // stylus is handled in differently in prod/dev
       //{ test: /\.styl$/, loader: 'style!css!postcss!stylus' },
 
@@ -110,7 +111,10 @@ const common = {
         }
       }
     ]
-  }
+  },
+  // stylus: {// postcss-cssnext includes autoprefixer, so it is not needed here
+  //   use: [poststylus(['postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
+  // }
 };
 
 const dev = {
@@ -119,33 +123,30 @@ const dev = {
   ],
   module: {
     loaders: [
-      { test: /\.styl$/, loader: 'style-loader!css-loader!postcss-loader!stylus-loader' },
-
+      {
+        test: /\.css$/,
+        loader: 'style!css?importLoaders=1!postcss'
+      },
+      {
+        test: /\.styl$/,
+        loader: 'style!css!postcss!stylus'
+      },
     ]
-  },
-  stylus: {
-    use: [poststylus(['autoprefixer', 'postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
-  },
+  }
 };
 
 const prod = {
   module: {
-    preLoaders: [
-      {
-        test: /\.(js|jsx)$/,
-        loader: 'eslint',
-        include: path.join(__dirname, '/src/')
-      }
-    ],
     loaders: [
+      { test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1!postcss')
+      },
       {
-        test: /\.styl$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader!stylus-loader')
+        test: /\.styl$/,
+        loader: ExtractTextPlugin.extract('style', 'css!postcss!stylus')
         // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
       }
     ]
-  },
-  stylus: {
-    use: [poststylus(['autoprefixer', 'postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
   },
   plugins: [
     new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
