@@ -1,10 +1,9 @@
 import React from 'react';
-import BaseComponent from './BaseComponent';
+import BaseComponent from '../shared/BaseComponent';
 
 export default class NavBar extends BaseComponent {
   constructor() {
     super();
-    this
     /* No more auto-binding in ES6! If we need
     prebinding, it should be done here */
     //this.tick = this.tick.bind(this);

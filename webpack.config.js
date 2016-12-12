@@ -60,15 +60,16 @@ const common = {
       // "url" loader works like "file" loader except that it embeds assets
       // smaller than specified limit in bytes as data URLs to avoid requests.
       // A missing `test` is equivalent to a match.
-      // {
-      //   exclude: [ /\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/ ],
-      //   loader: 'url',
-      //   query: {
-      //     limit: 10000,
-      //     name: 'static/media/[name].[hash:8].[ext]'
-      //   },
-      //   test: /.+/
-      // },
+      {
+        test: /\.(jpg|png)$/,
+        exclude: [ /\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/ ],
+        loader: 'url',
+        query: {
+          limit: 10000,
+          name: 'static/media/[name].[ext]'
+          //name: 'static/media/[name].[hash:8].[ext]'
+        }
+      },
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
@@ -112,9 +113,9 @@ const common = {
       }
     ]
   },
-  // stylus: {// postcss-cssnext includes autoprefixer, so it is not needed here
-  //   use: [poststylus(['postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
-  // }
+  stylus: {// postcss-cssnext includes autoprefixer, so it is not needed here
+    use: [poststylus(['postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
+  }
 };
 
 const dev = {
@@ -125,11 +126,11 @@ const dev = {
     loaders: [
       {
         test: /\.css$/,
-        loader: 'style!css?importLoaders=1!postcss'
+        loader: 'style!css?modules&importLoaders=1!postcss'
       },
       {
         test: /\.styl$/,
-        loader: 'style!css!postcss!stylus'
+        loader: 'style!css?modules&importLoaders=1!postcss!stylus'
       },
     ]
   }
@@ -139,17 +140,17 @@ const prod = {
   module: {
     loaders: [
       { test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css?importLoaders=1!postcss')
+        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss')
       },
       {
         test: /\.styl$/,
-        loader: ExtractTextPlugin.extract('style', 'css!postcss!stylus')
+        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss!stylus')
         // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
       }
     ]
   },
   plugins: [
-    new ExtractTextPlugin('static/css/[name].[contenthash:8].css')
+    new ExtractTextPlugin('static/css/[name].css')
   ]
 };
 
