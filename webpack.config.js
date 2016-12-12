@@ -35,6 +35,9 @@ const common = {
   devServer: {
     contentBase: './public'
   },
+  stylus: {// postcss-cssnext includes autoprefixer, so it is not needed here
+    use: [poststylus(['postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
+  },
   module: {
     // First, run the linter.
     // It's important to do this before Babel processes the JS.
@@ -112,9 +115,6 @@ const common = {
         }
       }
     ]
-  },
-  stylus: {// postcss-cssnext includes autoprefixer, so it is not needed here
-    use: [poststylus(['postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
   }
 };
 
