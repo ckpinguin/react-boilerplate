@@ -12,7 +12,7 @@ const PATHS = {
   dist: path.join(__dirname, 'dist'),
   //appDirectory: fs.realpathSync(process.cwd()) + '/dist/'
   publicPathDev: '/',
-  publicPathProd: 'https://ckpinguin.github.io/react-boilerplate/'
+  publicPathProd: 'https://ckpinguin.github.io/react-boilerplate/dist/'
 };
 
 const common = {

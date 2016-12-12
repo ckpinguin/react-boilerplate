@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "https://ckpinguin.github.io/react-boilerplate/";
+/******/ 	__webpack_require__.p = "https://ckpinguin.github.io/react-boilerplate/dist/";
 
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
