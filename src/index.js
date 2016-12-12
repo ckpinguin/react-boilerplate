@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ProfilePage from './ProfilePage';
-import favicon from './assets/favicon.ico';
+import './assets/favicon.ico';
 
 // needed for hot-reloading in dev-mode to work:
 //import '!style!css!stylus!./index.styl';
