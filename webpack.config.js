@@ -5,10 +5,14 @@ const validate = require('webpack-validator');
 const autoprefixer = require('autoprefixer');
 const poststylus = require('poststylus');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const fs = require('fs');
 
 const PATHS = {
   src: path.join(__dirname, 'src'),
-  dist: path.join(__dirname, 'dist')
+  dist: path.join(__dirname, 'dist'),
+  //appDirectory: fs.realpathSync(process.cwd()) + '/dist/'
+  publicPathDev: '/',
+  publicPathProd: path.join(__dirname, 'dist') + '/'
 };
 
 const common = {
@@ -16,24 +20,22 @@ const common = {
   // We'll be using the latter form given it's
   // convenient with more complex configurations.
   entry: [
-    path.join(__dirname, '/src/index.js')
+    path.join(PATHS.src, 'index.js')
   ],
   output: {
-    path: path.join(__dirname, '/dist'),
+    path: PATHS.dist,
     filename: 'static/js/bundle.js'
   },
   plugins: [
     new HTMLWebpackPlugin({
-      template: path.resolve(__dirname + '/public/index.html'),
+      //template: path.resolve(__dirname + '/public/index.html'),
+      template: path.join(PATHS.src, 'index.pug'),
       filename: 'index.html' // in prod-mode, this file lands in the dist folder
     })
   ],
   stats: {
    colors: true,
    reasons: true
-  },
-  devServer: {
-    contentBase: './public'
   },
   stylus: {// postcss-cssnext includes autoprefixer, so it is not needed here
     use: [poststylus(['postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css'])]
@@ -45,7 +47,7 @@ const common = {
       {
         test: /\.(js|jsx)$/,
         loader: 'eslint',
-        include: path.join(__dirname, '/src/')
+        include: PATHS.src
       }
     ],
     loaders: [
@@ -64,7 +66,7 @@ const common = {
       // smaller than specified limit in bytes as data URLs to avoid requests.
       // A missing `test` is equivalent to a match.
       {
-        test: /\.(jpg|png)$/,
+        test: /\.(jpg|png|ico)$/,
         exclude: [ /\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/ ],
         loader: 'url',
         query: {
@@ -90,7 +92,7 @@ const common = {
       {
         test: /\.(pug|jade)$/,
         include: path.join(__dirname, '/src/'),
-        loader: 'pug'
+        loader: 'pug-html'
       },
       // "postcss" loader applies autoprefixer to our CSS.
       // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -111,7 +113,7 @@ const common = {
         test: /\.svg$/,
         loader: 'file',
         query: {
-          name: 'static/media/[name].[hash:8].[ext]'
+          name: 'static/media/[name].[ext]'
         }
       }
     ]
@@ -119,6 +121,9 @@ const common = {
 };
 
 const dev = {
+  output: {
+    publicPath: PATHS.publicPath
+  },
   entry: [
     require.resolve('react-dev-utils/webpackHotDevClient')
   ],
@@ -137,6 +142,9 @@ const dev = {
 };
 
 const prod = {
+  output: {
+    publicPath: PATHS.publicPathProd
+  },
   module: {
     loaders: [
       { test: /\.css$/,
