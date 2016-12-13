@@ -5,6 +5,7 @@ const validate = require('webpack-validator');
 const autoprefixer = require('autoprefixer');
 const poststylus = require('poststylus');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require('webpack');
 const fs = require('fs');
 
 const PATHS = {
@@ -12,7 +13,8 @@ const PATHS = {
   dist: path.join(__dirname, 'dist'),
   //appDirectory: fs.realpathSync(process.cwd()) + '/dist/'
   publicPathDev: '/',
-  publicPathProd: 'https://ckpinguin.github.io/react-boilerplate/dist/'
+  //publicPathProd: 'https://ckpinguin.github.io/react-boilerplate/dist/'
+  publicPathProd: './'
 };
 
 const common = {
@@ -51,14 +53,6 @@ const common = {
       }
     ],
     loaders: [
-      // Default loader: load all assets that are not handled
-      // by other loaders with the url loader.
-      // Note: This list needs to be updated with every change of extensions
-      // the other loaders match.
-      // E.g., when adding a loader for a new supported file extension,
-      // we need to add the supported extension to this loader too.
-      // Add one new line in `exclude` for each loader.
-      //
       // "file" loader makes sure those assets get served by WebpackDevServer.
       // When you `import` an asset, you get its (virtual) filename.
       // In production, they would get copied to the `build` folder.
@@ -158,7 +152,12 @@ const prod = {
     ]
   },
   plugins: [
-    new ExtractTextPlugin('static/css/[name].css')
+    new ExtractTextPlugin('static/css/[name].css'),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
   ]
 };
 
