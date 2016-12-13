@@ -3,7 +3,6 @@ var express = require('express');
 var app = express();
 var PORT = process.env.PORT || 8080
 
-// We use webpack for dev-mode
 // // using webpack-dev-server and middleware in development environment
 // if(process.env.NODE_ENV !== 'production') {
 //   var webpackDevMiddleware = require('webpack-dev-middleware');
