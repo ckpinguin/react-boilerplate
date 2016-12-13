@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --config webpack.config.js",
     "start": "node server.js",
     "start-dev": "webpack-dev-server --progress --colors",
-    "postinstall": "webpack -p --config webpack.config.js"
+    "postinstall": "./node_modules/.bin/webpack -p --config webpack.config.js"
   },
   "author": "",
   "license": "ISC",

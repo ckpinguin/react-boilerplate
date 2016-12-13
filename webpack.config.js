@@ -168,6 +168,9 @@ switch(process.env.npm_lifecycle_event) {
   case 'build':
     config = merge(common, prod);
     break;
+  case 'postinstall': // the heroku way
+    config = merge(common, prod);
+    break;
   default:
     config = merge(common, dev);
 }
