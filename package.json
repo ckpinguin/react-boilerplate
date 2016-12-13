@@ -16,13 +16,8 @@
     "node": "6.9.1"
   },
   "dependencies": {
-    "express": "^4.14.0",
-    "html-webpack-plugin": "^2.24.1",
     "react": "^15.4.1",
-    "react-dom": "^15.4.1",
-    "webpack": "^1.13.3",
-    "webpack-merge": "^1.1.1",
-    "webpack-validator": "^2.2.12"
+    "react-dom": "^15.4.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.5.3",
