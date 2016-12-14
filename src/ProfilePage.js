@@ -21,7 +21,7 @@ export default class ProfilePage extends React.Component {
         <NavBar />
         <h1>All About Me or so...!</h1>
         <p>I like movies and blah blah blah blah blah</p>
-        <Button text='A super cool button'/>
+        <Button text="A super cool button"/>
         <div>
           <img src={selfie} />
         </div>
