@@ -6,8 +6,8 @@ import React from 'react';
  * @constructor
  */
 export default class BaseComponent extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
 
   /**

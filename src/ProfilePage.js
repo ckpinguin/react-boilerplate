@@ -22,7 +22,7 @@ export default class ProfilePage extends BaseComponent {
             <div>
                 <NavBar/>
                 <h1>All About Me or so...!</h1>
-                <Greeter/>
+                <Greeter maxLength={10}/>
                 <p>I like movies and blah blah blah blah blah</p>
                 <Button text="A super cool button"/>
                 <div>
