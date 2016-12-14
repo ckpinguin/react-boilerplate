@@ -1,4 +1,4 @@
-import styles from './ScopedAnimations.styl';
+import styles from './styles.styl';
 
 import BaseComponent from '../shared/BaseComponent';
 

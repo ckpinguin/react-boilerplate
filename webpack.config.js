@@ -134,10 +134,10 @@ const dev = {
         //require.resolve('react-dev-utils/webpackHotDevClient')
     ],
     module: {
-        preLoaders: [{
-            test: /\.css$/,
-            loader: 'stylelint'
-        }],
+        // preLoaders: [{
+        //     test: /\.css$/,
+        //     loader: 'stylelint'
+        // }],
         loaders: [{
             test: /\.css$/,
             exclude: /node_modules/,
