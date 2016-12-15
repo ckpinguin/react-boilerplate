@@ -10,7 +10,8 @@
     "start": "npm run dev",
     "dev": "webpack-dev-server --inline --hot --progress --colors",
     "server:dev": "nodemon server.js",
-    "server:prod": "cross-env NODE_ENV=production node server.js"
+    "server:prod": "cross-env NODE_ENV=production node server.js",
+    "babelize": "babel --watch=./src --out-dir=./babelbuild"
   },
   "author": "",
   "license": "ISC",
@@ -30,6 +31,8 @@
     "babel-core": "^6.18.2",
     "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.8",
+    "babel-plugin-react": "^1.0.0",
+    "babel-plugin-transform-flow-strip-types": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "cross-env": "^3.1.3",

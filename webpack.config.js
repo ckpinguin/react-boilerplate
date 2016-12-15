@@ -2,11 +2,11 @@ const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const validate = require('webpack-validator');
-const autoprefixer = require('autoprefixer');
+//const autoprefixer = require('autoprefixer');
 const poststylus = require('poststylus');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
-const fs = require('fs');
+//const fs = require('fs');
 
 const PATHS = {
     src: path.join(__dirname, 'src'),
@@ -22,16 +22,13 @@ const common = {
     // Entry accepts a path or an object of entries.
     // We'll be using the latter form given it's
     // convenient with more complex configurations.
-    entry: [
-        path.join(PATHS.src, 'index.js')
-    ],
+    entry: [path.join(PATHS.src, 'index.js')],
     output: {
         path: PATHS.dist,
         filename: 'static/js/bundle.js',
         publicPath: PATHS.publicPathDev
     },
     plugins: [
-        new webpack.NoErrorsPlugin(),
         new HTMLWebpackPlugin({
             //template: path.resolve(__dirname + '/public/index.html'),
             template: path.join(PATHS.src, 'index.pug'),
@@ -49,12 +46,14 @@ const common = {
     module: {
         // First, run the linter.
         // It's important to do this before Babel processes the JS.
-        preLoaders: [{
-            test: /\.(js|jsx)$/,
-            loader: 'eslint',
-            //include: PATHS.src,
-            exclude: /node_modules/
-        }],
+        preLoaders: [
+            {
+                test: /\.(js|jsx)$/,
+                loader: 'eslint',
+                //include: PATHS.src,
+                exclude: /node_modules/
+            }
+        ],
         loaders: [
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
@@ -64,12 +63,14 @@ const common = {
             // A missing `test` is equivalent to a match.
             {
                 test: /\.(jpg|png|ico)$/,
-                exclude: [/\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/],
+                exclude: [
+                    /\.html$/, /\.(js|jsx)$/, /\.css$/, /\.json$/, /\.svg$/
+                ],
                 loader: 'url',
                 query: {
                     limit: 10000,
                     name: 'static/media/[name].[ext]'
-                        //name: 'static/media/[name].[hash:8].[ext]'
+                    //name: 'static/media/[name].[hash:8].[ext]'
                 }
             },
             // Process JS with Babel.
@@ -79,8 +80,8 @@ const common = {
                 exclude: /node_modules/,
                 loader: 'babel',
                 query: {
-                    babelrc: false, // ignore .babelrc presets
-                    presets: ['react', 'es2015'],
+                    //babelrc: false, // ignore .babelrc presets
+                    //presets: ['react', 'es2015'],
                     // This is a feature of `babel-loader` for webpack (not Babel itself).
                     // It enables caching results in ./node_modules/.cache/babel-loader/
                     // directory for faster rebuilds.
@@ -118,12 +119,13 @@ const common = {
 
 const dev = {
     plugins: [
+        new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
                 '__API_SERVER_URL': JSON.stringify('http://localhost:8080/api')
             }
         }),
-        new webpack.HotModuleReplacementPlugin(),
+        new webpack.HotModuleReplacementPlugin()
     ],
     output: {
         publicPath: PATHS.publicPathDev
@@ -138,15 +140,17 @@ const dev = {
         //     test: /\.css$/,
         //     loader: 'stylelint'
         // }],
-        loaders: [{
-            test: /\.css$/,
-            exclude: /node_modules/,
-            loader: 'style!css?modules&importLoaders=1!postcss'
-        }, {
-            test: /\.styl$/,
-            exclude: /node_modules/,
-            loader: 'style!css?modules&importLoaders=1!postcss!stylus'
-        }, ]
+        loaders: [
+            {
+                test: /\.css$/,
+                exclude: /node_modules/,
+                loader: 'style!css?modules&importLoaders=1!postcss'
+            }, {
+                test: /\.styl$/,
+                exclude: /node_modules/,
+                loader: 'style!css?modules&importLoaders=1!postcss!stylus'
+            }
+        ]
     }
 };
 
@@ -155,14 +159,16 @@ const prod = {
         publicPath: PATHS.publicPathProd
     },
     module: {
-        loaders: [{
-            test: /\.css$/,
-            loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss')
-        }, {
-            test: /\.styl$/,
-            loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss!stylus')
+        loaders: [
+            {
+                test: /\.css$/,
+                loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss')
+            }, {
+                test: /\.styl$/,
+                loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss!stylus')
                 // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
-        }]
+            }
+        ]
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -179,7 +185,7 @@ const prod = {
                 warnings: false
             }
         }),
-        new ExtractTextPlugin('static/css/[name].css'),
+        new ExtractTextPlugin('static/css/[name].css')
     ]
 };
 
@@ -187,21 +193,19 @@ var config;
 
 // Detect how npm is run and branch based on that
 switch (process.env.npm_lifecycle_event) {
-    case 'build:prod':
-        config = merge(common, prod);
-        break;
-    default:
-        config = merge(common, dev);
+case 'build:prod':
+    config = merge(common, prod);
+    break;
+default:
+    config = merge(common, dev);
 }
 
 /** Extending the webpack-validator schema for special config stuff **/
-const Joi = require('webpack-validator').Joi
-    // This joi schema will be `Joi.concat`-ed with the internal schema
+const Joi = require('webpack-validator').Joi;
+// This joi schema will be `Joi.concat`-ed with the internal schema
 const validatorSchemaExtension = Joi.object({
     // this would just allow the property and doesn't perform any additional validation
     stylus: Joi.any()
-})
-
-module.exports = validate(config, {
-    schemaExtension: validatorSchemaExtension
 });
+
+module.exports = validate(config, {schemaExtension: validatorSchemaExtension});

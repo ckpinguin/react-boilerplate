@@ -6,18 +6,18 @@ import React from 'react';
  * @constructor
  */
 export default class BaseComponent extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+    constructor(props) {
+        super(props);
+    }
 
-  /**
+    /**
    * Binds given methods to the actual instance.
    * This is re-Introducing auto-binding even in ES6
    * @constructor
    * @param {string} methods - The methods to be bound.
    */
-  _bind(...methods) {
-    methods.forEach( (method ) => this[method] = this[method].bind(this) );
-  }
+    _bind(...methods) {
+        methods.forEach((method) => this[method] = this[method].bind(this));
+    }
 
 }

@@ -7,9 +7,16 @@
     "env": {
         "browser": true,
         "es6": true,
-        "node": true
+        "node": true,
+        "commonjs": true,
+
     },
+    "extends": "eslint:recommended",
     "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
         "sourceType": "module"
     },
     "plugins": [
@@ -17,10 +24,6 @@
     ],
     "rules": {
         "no-unused-vars": 1,
-        "quotes": [
-            2,
-            "single"
-        ],
         "jsx-quotes": 1,
         "react/jsx-no-undef": 1,
         "react/jsx-uses-react": 1,
@@ -29,6 +32,22 @@
         "react/no-multi-comp": 1,
         "react/no-unknown-property": 1,
         "react/self-closing-comp": 1,
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
     }
 
 }
