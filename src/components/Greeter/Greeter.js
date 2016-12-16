@@ -40,9 +40,10 @@ export default class Greeter extends BaseComponent {
         return (
             <div>
                 Greeting:
-                <input className={greetingValid
-                    ? styles.valid
-                    : styles.invalid} value={this.state.greeting} onChange={(e) => this.onGreetingChange(e)} ref={(c) => this.inputField = c} // set native ref
+                <input className={greetingValid ? styles.valid : styles.invalid}
+                    value={this.state.greeting}
+                    onChange={(e) => this.onGreetingChange(e)}
+                    ref={(c) => this.inputField = c} // set native ref
                 />
                 <span style={{
                     color: this.hasRemainingChars()
@@ -58,3 +59,6 @@ export default class Greeter extends BaseComponent {
         );
     }
 }
+Greeter.propTypes = {
+    maxLenth: React.PropTypes.number.isRequired
+};

@@ -1,19 +1,18 @@
-@keyframes bounce
-  33%
-    transform translateY(-20px)
-  66%
-    transform translateY(0px)
-
 .bounce
-  animation bounce 1s infinite ease-in-out
+    animation bouncing 1s infinite ease-in-out
 
+@keyframes Bounce
+    33%
+        transform translateY(-20px)
+    66%
+        transform translateY(0px)
 .root
-  padding 20px 10px
+    padding 20px 10px
 
 .ball
-  background rebeccapurple
-  border-radius 20px
-  // composes bounce from "./animations.css"
-  composes bounce
-  height 40px
-  width 40px
+    width 40px
+    height 40px
+    background rebeccapurple
+    // composes bounce from "./animations.css"
+    animation-name Bounce
+    border-radius 20px

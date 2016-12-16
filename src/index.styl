@@ -36,11 +36,15 @@ $font_2 = "Helvetica"
 $font_3 = "Arial"
 $font_4 = "sans-serif"
 $font_5 = "Droid Serif"
-$font_site = font_0, font_1, font_3, font_4, font_5
-$font_droid = font_5, font_1, font_2, font_3, font_4
+$font_site = $font_0, $font_1, $font_3, $font_4, $font_5
+$font_droid = $font_5, $font_1, $font_2, $font_3, $font_4
 
 body
-  font-family font_site
-  font-weight 600
-  margin-left 125px
-  width 10%
+    // background $url_1 no-repeat
+    font-weight 600
+    font-family $font_site
+
+:global .alert
+    background-color white
+    color red
+    font-weight 900

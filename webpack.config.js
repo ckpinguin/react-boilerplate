@@ -18,7 +18,6 @@ const PATHS = {
 };
 
 const common = {
-    devtool: 'source-map',
     // Entry accepts a path or an object of entries.
     // We'll be using the latter form given it's
     // convenient with more complex configurations.
@@ -118,6 +117,7 @@ const common = {
 };
 
 const dev = {
+    devtool: 'source-map',
     plugins: [
         new webpack.NoErrorsPlugin(),
         new webpack.DefinePlugin({
@@ -144,11 +144,20 @@ const dev = {
             {
                 test: /\.css$/,
                 exclude: /node_modules/,
-                loader: 'style!css?modules&importLoaders=1!postcss'
+                loaders: [
+                    'style?sourceMap',
+                    'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+                    'postcss'
+                ]
             }, {
                 test: /\.styl$/,
                 exclude: /node_modules/,
-                loader: 'style!css?modules&importLoaders=1!postcss!stylus'
+                loaders: [
+                    'style?sourceMap',
+                    'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+                    'postcss',
+                    'stylus'
+                ]
             }
         ]
     }
@@ -162,10 +171,10 @@ const prod = {
         loaders: [
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss')
+                loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]!postcss')
             }, {
                 test: /\.styl$/,
-                loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1!postcss!stylus')
+                loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]!postcss!stylus')
                 // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
             }
         ]
