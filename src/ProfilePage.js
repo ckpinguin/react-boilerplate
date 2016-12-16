@@ -13,6 +13,7 @@ export default function ProfilePage() {
     };
     return <div>
         <NavBar/>
+        <BouncingBall />
         <VotingComponent vote={vote}/>
         <ChoiceBar title="JavaScript" count={123} percent={37}/>
         <h1>All About Me or so...!</h1>

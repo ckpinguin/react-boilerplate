@@ -25,7 +25,7 @@ const common = {
     output: {
         path: PATHS.dist,
         filename: 'static/js/bundle.js',
-        publicPath: PATHS.publicPathDev
+        publicPath: PATHS.publicPathProd
     },
     plugins: [
         new HTMLWebpackPlugin({
@@ -146,7 +146,7 @@ const dev = {
                 exclude: /node_modules/,
                 loaders: [
                     'style?sourceMap',
-                    'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+                    'css?sourceMap&modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
                     'postcss'
                 ]
             }, {
@@ -154,13 +154,16 @@ const dev = {
                 exclude: /node_modules/,
                 loaders: [
                     'style?sourceMap',
-                    'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+                    'css?sourceMap&modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
                     'postcss',
                     'stylus'
                 ]
             }
         ]
-    }
+    },
+    postcss: [
+        require('autoprefixer'),
+    ]
 };
 
 const prod = {
@@ -179,6 +182,9 @@ const prod = {
             }
         ]
     },
+    postcss: [
+        require('autoprefixer'),
+    ],
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
