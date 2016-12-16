@@ -25,17 +25,16 @@ const common = {
     output: {
         path: PATHS.dist,
         filename: 'static/js/bundle.js',
-        publicPath: PATHS.publicPathProd
+        publicPath: PATHS.publicPathDev
     },
     plugins: [
         new HTMLWebpackPlugin({
-            //template: path.resolve(__dirname + '/public/index.html'),
             template: path.join(PATHS.src, 'index.pug'),
             filename: 'index.html' // in prod-mode, this file lands in the dist folder
         }),
         new webpack.NoErrorsPlugin()
     ],
-    stats: {
+    stats: { // webpack 2 option
         colors: true,
         reasons: true
     },

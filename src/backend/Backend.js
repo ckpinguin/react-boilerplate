@@ -1,35 +1,35 @@
 import 'isomorphic-fetch';
-
-const BACKEND_URL = __API_SERVER_URL__;
+//const BACKEND_URL = __API_SERVER_URL__;
+const BACKEND_URL = 'dummy';
 
 export function fetchJson(path) {
-  const url = `${BACKEND_URL}${path}`;
+    const url = `${BACKEND_URL}${path}`;
 
-  return fetch(url)
+    return fetch(url)
     .then((response) => {
-      return response.json();
+        return response.json();
     })
     .catch((ex) => {
-      console.error('parsing failed', ex);
+        console.error('parsing failed', ex);
     });
 }
 
 export function sendJson(method, path, payload={}) {
-  const url = `${BACKEND_URL}${path}`;
+    const url = `${BACKEND_URL}${path}`;
 
-  return fetch(url, {
-    method:  method,
-    body:    JSON.stringify(payload),
-    headers: {
-      'Accept':       'application/json',
-      'Content-Type': 'application/json'
-    }
-  })
+    return fetch(url, {
+        method:  method,
+        body:    JSON.stringify(payload),
+        headers: {
+            'Accept':       'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
     .then((response) => {
-      return response.json();
+        return response.json();
     })
     .catch((ex) => {
-      console.error('parsing failed', ex);
+        console.error('parsing failed', ex);
     });
 
 }
