@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './styles.styl';
+import NavBar from '../NavBar/NavBar';
 
 export default function Layout({children}) {
     return (
@@ -9,9 +10,10 @@ export default function Layout({children}) {
                     Vote as a Service (VaaS)
                 </div>
             </div>
+            <NavBar />
             <div className={styles.main}>
                 <div className={styles.container}>
-                    {children}
+                    {React.Children.map(children, c => <div key={c.id}>{c}</div>)}
                 </div>
             </div>
         </div>

@@ -9,15 +9,27 @@ const vote = {
     'title': 'It\'s a test!',
     'description': 'Favourite programming language',
     'choices': [
-        { title: 'JavaScript', count: 123, percent: 37 },
-        { title: 'Java', count: 4, percent: 1 },
-        { title: 'Go', count: 40, percent: 15 },
-        { title: 'C', count: 20, percent: 7 }
+        {
+            title: 'JavaScript',
+            count: 123,
+            percent: 37
+        }, {
+            title: 'Java',
+            count: 4,
+            percent: 1
+        }, {
+            title: 'Go',
+            count: 40,
+            percent: 15
+        }, {
+            title: 'C',
+            count: 20,
+            percent: 7
+        }
     ]
 };
 ReactDOM.render(
     <Layout>
         <VotingComponent vote={vote}/>
     </Layout>,
-        document.getElementById('root')
-        );
+    document.getElementById('root'));

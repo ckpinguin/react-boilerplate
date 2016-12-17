@@ -9,6 +9,7 @@ export default class VotingComponent extends BaseComponent {
     }
     render() {
         const {vote} = this.props;
+        const totalVotes = vote.choices.reduce((prev, curr) => prev + curr.count, 0);
         return (
             <div className={[styles.row, styles.votingRow, styles.spacer].join(' ')}>
                 <div className={styles.head}>
@@ -22,7 +23,7 @@ export default class VotingComponent extends BaseComponent {
                     <div className={[styles.description, styles.emphasis].join(' ')}>
                         {vote.description}
                     </div>
-                    <div>{vote.choices.map(c => <ChoiceBar key={c.id} {...c}/>)}
+                    <div>{vote.choices.map(c => <ChoiceBar {...c}/>)}
                     </div>
                 </div>
             </div>

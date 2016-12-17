@@ -2,22 +2,28 @@ import React from 'react';
 
 export default function NavBar() {
     var pages = [
-        'home',
-        'blog',
-        'pics',
-        'bio',
-        'art',
-        'shop',
-        'about',
-        'contact'
+        {
+            id: 1,
+            name: 'home'
+        }, {
+            id: 2,
+            name: 'blog'
+        }, {
+            id: 3,
+            name: 'pics'
+        }, {
+            id: 4,
+            name: 'bio'
+        }, {
+            id: 5,
+            name: 'about'
+        }, {
+            id: 6,
+            name: 'contact'
+        }
     ];
-    var navLinks = pages.map(function(page) {
-        return (
-                <a href={'/' + page}>
-                    {page}
-                </a>
-        );
-    });
+    return <nav>
+        {pages.map(p => <a key={p.id} href={'/' + p.name}>{p.name}&nbsp;&nbsp;&nbsp;</a>)}
+    </nav>;
 
-    return <nav>{navLinks}</nav>;
 }

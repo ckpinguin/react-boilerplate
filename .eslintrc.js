@@ -21,6 +21,7 @@ module.exports = {
     "plugins": ["react"],
     "rules": {
         "no-console": 0,
+        "no-unused-vars": 2,
         // "no-unexpected-multilines": 0,
         "indent": [
             "error", 4
