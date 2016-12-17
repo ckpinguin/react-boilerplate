@@ -16,7 +16,7 @@ export default class VotingComponent extends BaseComponent {
                     <h1 className={styles.title}>
                         {vote.title}
                         <div className={styles.badge}>
-                            {vote.totalVotes}
+                            {totalVotes}
                             Votes
                         </div>
                     </h1>
