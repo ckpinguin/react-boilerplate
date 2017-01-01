@@ -1,26 +1,34 @@
 import React from 'react';
 import BaseComponent from '../shared/BaseComponent';
-import VoteList from '../components/VoteList/VoteList';
+import VoteList from '../VoteList/VoteList';
+import VoteComposer from '../VoteComposer/VoteComposer';
 
 export default class VoteController extends BaseComponent {
+    /**
+    @constructor
+    @param props with 'allVotes' to be used in the respective state
+    */
     constructor(props) {
         super(props);
 
         this.state = {
             allVotes: props.allVotes
         };
-        this.__bind(this.setCurrentVote, this.registerVote);
+        this._bind(this.activateVoteComposer, this.deactivateVoteComposer,
+                    this.setCurrentVote, this.registerVote);
     }
 
     /**
-    Setting state of currentVoteId
+    Setting the state variable 'currentVoteId'.
     @param vote (object)
     */
     setCurrentVote(vote) {
-        this.setState({currentVoteId: vote ? vote.id : null});
+        const { composerActive } = this.state;
+        this.setState({currentVoteId: vote && !composerActive ? vote.id : null});
     }
 
     /**
+    @type Event handler
     Takes a 'vote' and a 'choice' object in that vote and returns a copy
     of that vote with the corresponding choice.count incremented by 1.
     @return object newVote
@@ -40,6 +48,7 @@ export default class VoteController extends BaseComponent {
     }
 
     /**
+    @type Event handler
     Replaces state object 'allVotes', calls @see registerChoice(vote, choice)
     to get a new vote object back with incremented choice.count
     for the corresponding 'vote' object.
@@ -56,20 +65,39 @@ export default class VoteController extends BaseComponent {
         });
     }
 
+    activateVoteComposer() {
+        this.setState({
+            currentVoteId: null,
+            composerActive: true
+        });
+    }
+
+    deactivateVoteComposer() {
+        this.setState({
+            composerActive: false
+        });
+    }
+
     render() {
-        const { allVotes, currentVoteId } = this.state;
+        const { allVotes, currentVoteId, composerActive } = this.state;
         return (
         <div>
-            <VoteList allVotes={allVotes}
-                currentVoteId={currentVoteId}
-                onSelectVote={this.setCurrentVote}
-                onDismissVote={()=>{this.setCurrentVote(null);}}
-                onRegisterVote={this.registerVote}
+            <VoteList   allVotes={allVotes}
+                        currentVoteId={currentVoteId}
+                        onSelectVote={this.setCurrentVote}
+                        onDismissVote={()=>{this.setCurrentVote(null);}}
+                        onRegisterVote={this.registerVote}
+            />
+            <VoteComposer   active={composerActive}
+                            onDeactivate={this.deactivateVoteComposer}
+                            onActivate={this.activateVoteComposer}
+                            onSave={()=>{console.log('Save called');}}
             />
         </div>
         );
     }
 }
+
 VoteController.propTypes = {
     allVotes: React.PropTypes.array.isRequired
 };

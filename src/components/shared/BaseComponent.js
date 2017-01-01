@@ -3,7 +3,6 @@ import React from 'react';
 /**
  * A base class with some helping functionality
  * like auto-binding etc.
- * @constructor
  */
 export default class BaseComponent extends React.Component {
     constructor(props) {
@@ -16,7 +15,7 @@ export default class BaseComponent extends React.Component {
    * @constructor
    * @param {string} methods - The methods to be bound.
    */
-    _bind(...methods) {
+    __bind(...methods) {
         methods.forEach((method) => this[method] = this[method].bind(this));
     }
 

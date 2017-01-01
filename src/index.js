@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Layout from './components/Layout/Layout';
-import VoteList from './components/VoteList/VoteList';
+import VoteController from './components/VoteController/VoteController';
 import './assets/favicon.ico';
 import './index.styl';
 
 const allVotes = [{
+    'id': 'vote_1',
     'title': 'It\'s a test!',
     'description': 'Favourite programming language',
     'choices': [
@@ -28,6 +29,7 @@ const allVotes = [{
         }
     ]
 }, {
+    'id': 'vote_2',
     'title': 'For the soup!',
     'description': 'Favourite soup',
     'choices': [
@@ -51,7 +53,7 @@ const allVotes = [{
     ]
 }];
 
+const mainComponent = <VoteController allVotes={allVotes}/>;
 ReactDOM.render(
-    <Layout>
-        <VoteList allVotes={allVotes}/>
-    </Layout>, document.getElementById('root'));
+    <Layout>{mainComponent}</Layout>,
+        document.getElementById('root'));
