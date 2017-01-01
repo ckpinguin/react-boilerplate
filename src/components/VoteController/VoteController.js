@@ -3,7 +3,6 @@ import BaseComponent from '../shared/BaseComponent';
 import VoteList from '../components/VoteList/VoteList';
 
 export default class VoteController extends BaseComponent {
-
     constructor(props) {
         super(props);
 
@@ -14,13 +13,16 @@ export default class VoteController extends BaseComponent {
     }
 
     /**
-    setting state of currentVoteId
+    Setting state of currentVoteId
+    @param vote (object)
     */
     setCurrentVote(vote) {
         this.setState({currentVoteId: vote ? vote.id : null});
     }
 
     /**
+    Takes a 'vote' and a 'choice' object in that vote and returns a copy
+    of that vote with the corresponding choice.count incremented by 1.
     @return object newVote
     @param vote (object) The vote for which we count a new choice
     @param choice (object) The choice that was voted for
@@ -28,9 +30,9 @@ export default class VoteController extends BaseComponent {
     registerChoice(vote, choice) {
         console.log(`Registering choice: ${choice.id}`);
         const newVote = {
-            ...vote,
-            choices:
-                vote.choices.map(c => c.id !== choice.id ? c :
+            ...vote, // object spread (ES6)
+            choices: // overwrite the choices of the above spread
+                vote.choices.map((c) => c.id !== choice.id ? c :
                 {...c, count: c.count + 1 }
             )
         };
@@ -38,8 +40,9 @@ export default class VoteController extends BaseComponent {
     }
 
     /**
-    Setting state of allVotes, calls @see registerChoice(vote, choice) to get
-    a new vote object back with updated choice count for the specific vote.
+    Replaces state object 'allVotes', calls @see registerChoice(vote, choice)
+    to get a new vote object back with incremented choice.count
+    for the corresponding 'vote' object.
     @param vote (object) The vote whose state will be updated
     @param choice (object) The choice that was chosen on the vote
     */

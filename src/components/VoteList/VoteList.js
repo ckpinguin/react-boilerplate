@@ -1,6 +1,6 @@
-import React from 'react/react';
-import VoteSummary from '../components/VoteSummary/VoteSummary';
-import VotingComponent from '../components/VotingComponent/VotingComponent';
+import React from 'react';
+import VoteSummary from '../VoteSummary/VoteSummary';
+import VotingComponent from '../VotingComponent/VotingComponent';
 
 export default function VoteList({ allVotes, currentVoteId, onSelectVote, onRegisterVote, onDismissVote }) {
     return (

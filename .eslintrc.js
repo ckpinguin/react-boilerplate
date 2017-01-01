@@ -21,10 +21,10 @@ module.exports = {
     "plugins": ["react"],
     "rules": {
         "no-console": 0,
-        "no-unused-vars": 2,
+        "no-unused-vars": 1,
         // "no-unexpected-multilines": 0,
         "indent": [
-            "error", 4
+            "warn", 4
         ],
         "linebreak-style": [
             "error", "unix"
