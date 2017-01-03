@@ -43,6 +43,7 @@ export default class VoteComposer extends React.Component {
         this.state = {
             vote: emptyVote()
         };
+        dd('VoteComposer.construtor()', this.state, 'this.state');
         this.activateIfNeeded = this.activateIfNeeded.bind(this);
         this.save = this.save.bind(this);
         this.close = this.close.bind(this);
@@ -55,7 +56,9 @@ export default class VoteComposer extends React.Component {
     */
     close() {
         const { onDeactivate } = this.props;
-        this.setState(emptyVote());
+        dd('close()', onDeactivate, 'onDeactivate');
+        this.setState({ vote: emptyVote() }); // BUG!
+        dd('new state of VoteComposer', this.state, 'this.state');
         onDeactivate();
     }
 
@@ -76,10 +79,11 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    * Helper, saves and closes the new vote form.
+    * Helper, activates the composer form
     */
     activateIfNeeded() {
         const { onActivate, active } = this.props;
+        dd('activateIfNeeded()', onActivate, 'onActivate');
         if (!active) {
             onActivate();
         }
@@ -96,6 +100,9 @@ export default class VoteComposer extends React.Component {
 
         let formCompleted =
             active && title && description && choicesCount > 1;
+
+        dd('isFormCompleted()', formCompleted, 'formCompleted');
+
 
         if (formCompleted) {
             // if all (except the last empty one) choices are filled
@@ -122,9 +129,12 @@ export default class VoteComposer extends React.Component {
             // ES6 "computed property" as the fieldName will be the choice item
             [fieldName]: fieldValue
         };
+        dd('onChange()', newVote, 'newVote');
         this.setState({
             vote: newVote
         });
+        dd('new state of VoteComposer', this.state, 'this.state');
+
     }
 
     /**
@@ -147,6 +157,7 @@ export default class VoteComposer extends React.Component {
         const newChoices =
             choices.map((c) => (c.id === choice.id ? newChoice : c));
 
+        dd('onChoiceChange()', newChoices, 'newChoices');
         // add a new, empty choice field if we're currently in the last choice and the choice
         // has been new (empty) before. In other words: after entering the first character to the current last
         // choice add the field for the next choice
@@ -161,12 +172,14 @@ export default class VoteComposer extends React.Component {
                 choices: newChoices
             }
         });
+        dd('new state of VoteComposer', this.state, 'this.state');
     }
 
     /**
     * Helper, that renders the inactive form
     */
     renderInactiveForm() {
+        dd('renderInactiveForm()', null, null);
         return (
             <div className={[styles.row, styles.voteComposer, styles.spacer].join(' ')}
                 onClick={this.activateIfNeeded}>
@@ -187,6 +200,8 @@ export default class VoteComposer extends React.Component {
     renderActiveForm() {
         const { vote: { title, description, choices }} = this.state;
         const formCompleted = this.isFormCompleted();
+
+        dd('renderActiveForm()', null, null);
 
         return (
             <div className={[styles.row, styles.voteComposer, styles.spacer].join(' ')}>

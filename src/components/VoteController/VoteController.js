@@ -69,6 +69,7 @@ export default class VoteController extends React.Component {
     @param {Object} choice - The choice that was chosen on the vote
     */
     registerVote(vote, choice) {
+        dd('registerVote()', vote.id, 'vote.id');
         const { allVotes } = this.state;
         const newVotes = allVotes.map(
                 (v)=>v.id !== vote.id ? v : this.registerChoice(v, choice)
@@ -83,9 +84,8 @@ export default class VoteController extends React.Component {
     * @param {Object} vote - The newly created vote
     */
     addVote(vote) {
-        dd('addVote()', vote, 'vote');
-        const { allVotes } = this.state;
         dd('addVote()', vote.id, 'vote.id');
+        const { allVotes } = this.state;
         // Create a new object and "append" the new vote to it
         this.setState({allVotes: [...allVotes, vote]});
     }
@@ -94,6 +94,7 @@ export default class VoteController extends React.Component {
     * Event handler, activates the vote composer component
     */
     activateVoteComposer() {
+        dd('activateComposer()', null, null);
         this.setState({
             currentVoteId: null,
             composerActive: true
