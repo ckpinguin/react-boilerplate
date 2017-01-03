@@ -6,13 +6,15 @@ export default function VoteList({ allVotes, currentVoteId, onSelectVote, onRegi
     return (
     <div>
         {allVotes.map((vote) => {
+            // Full vote view only for the clicked voting
             if (vote.id === currentVoteId) {
                 return <VotingComponent key={vote.id}
-                    vote={vote}
-                    onDismissVote={()=>{onDismissVote(vote);}}
-                    onRegisterChoice={(choice)=>{onRegisterVote(vote, choice);}}
+                                        vote={vote}
+                                        onDismissVote={()=>{onDismissVote(vote);}}
+                                        onRegisterChoice={(choice)=>{onRegisterVote(vote, choice);}}
                 />;
             }
+            // else just the summary
             return <VoteSummary key={vote.id} vote={vote} onActivate={()=>{onSelectVote(vote);}}/>;
         })}
     </div>
