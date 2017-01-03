@@ -1,25 +1,29 @@
 import React from 'react';
 import styles from './styles.styl';
+import { guid, dd } from '../shared/toolbox';
+
 
 /**
-@type Helper
-@desc Creates an empty choice object
+* Helper, creates an empty choice object
 */
 function emptyChoice() {
+    const uuid = guid();
+    dd('emptyChoice()', uuid, 'uuid');
     return {
-        id:     `choice_${Date.now()}`,
+        id:     `choice_${uuid}`,
         count:  0,
         title:  null
     };
 }
 
 /**
-@type Helper
-@desc Creates an empty vote object
+* Helper, creates an empty vote object
 */
 function emptyVote() {
+    const uuid = guid();
+    dd('emptyVote()', uuid, 'uuid');
     return {
-        id:             `vote_${Date.now()}`,
+        id:             `vote_${uuid}`,
         title:          '',
         description:    '',
         formCompleted:  false,
@@ -29,9 +33,9 @@ function emptyVote() {
 
 export default class VoteComposer extends React.Component {
     /**
-    @constructor
-    @param props with 'active' flag,'onActivate', 'onDeactivate' and
-            'onSave' event handlers
+    * @constructs VoteComposer
+    * @param {Object} props - props with 'active' flag,'onActivate',
+    * 'onDeactivate' and 'onSave' event handlers
     */
     constructor(props) {
         super(props);
@@ -47,8 +51,7 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    @type Helper
-    @desc Closes the active form.
+    * Helper, closes the active form.
     */
     close() {
         const { onDeactivate } = this.props;
@@ -57,8 +60,7 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    @type Helper
-    @desc Saves and closes the new vote form.
+    * Helper, saves and closes the new vote form.
     */
     save() {
         const { onSave } = this.props;
@@ -68,13 +70,13 @@ export default class VoteComposer extends React.Component {
             // get rid of the empty choice from our "pool"
             choices: vote.choices.slice(0, -1)
         };
+        dd('VoteComposer.save()', newVote, 'newVote');
         onSave(newVote);
         this.close();
     }
 
     /**
-    @type Helper
-    @desc Saves and closes the new vote form.
+    * Helper, saves and closes the new vote form.
     */
     activateIfNeeded() {
         const { onActivate, active } = this.props;
@@ -84,9 +86,8 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    @type Helper
-    @desc Decides if the voting form is sufficiently filled
-    @return boolean
+    * Helper, decides if the voting form is sufficiently filled
+    * @returns {boolean}
     */
     isFormCompleted() {
         const { active } = this.props;
@@ -103,14 +104,14 @@ export default class VoteComposer extends React.Component {
                 (c, ix) => ix === choicesCount - 1 || c.title
             );
         }
-        return true;
+        return formCompleted;
     }
 
     /**
-    @type Event handler
-    @param event
-    @desc Copies the current vote object and adds a new field name/value to it
-        then sets current state object 'vote' to this new object
+    * Event handler, copies the current vote object and adds a new
+    * field name/value to it then sets current state object 'vote'
+    * to this new object
+    * @param {Object} event
     */
     onChange(event) {
         const { name: fieldName, value: fieldValue } = event.target;
@@ -127,12 +128,11 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    @type Event handler
-    @param choiceIx (int): the index of the changed choice
-    @param title (string): the new title of the changed choice
-    @desc creates a new choice option in the corresponding choice object and
-        then replaces the corresponding choice object in the current vote
-        object (state).
+    * Event handler, creates a new choice option in the corresponding choice object and
+    * then replaces the corresponding choice object in the current vote
+    * object (state).
+    * @param {number} choiceIx - the index of the changed choice
+    * @param {string} title - the new title of the changed choice
     */
     onChoiceChange(choiceIx, title) {
         const { vote } = this.state;
@@ -145,10 +145,11 @@ export default class VoteComposer extends React.Component {
         };
 
         const newChoices =
-            choices.map(c => (c.id === choice.id ? newChoice : c));
+            choices.map((c) => (c.id === choice.id ? newChoice : c));
 
-        // create choice if the last field was empty before something
-        // has been entered in it
+        // add a new, empty choice field if we're currently in the last choice and the choice
+        // has been new (empty) before. In other words: after entering the first character to the current last
+        // choice add the field for the next choice
         if (!choice.title && newChoice.title
                 && choiceIx === (choices.length -1)) {
             newChoices.push(emptyChoice());
@@ -163,8 +164,7 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    @type Helper
-    @desc Renders the inactive form
+    * Helper, that renders the inactive form
     */
     renderInactiveForm() {
         return (
@@ -182,8 +182,7 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    @type Helper
-    @desc Renders the active form
+    * Helper, that renders the active form
     */
     renderActiveForm() {
         const { vote: { title, description, choices }} = this.state;
@@ -193,7 +192,8 @@ export default class VoteComposer extends React.Component {
             <div className={[styles.row, styles.voteComposer, styles.spacer].join(' ')}>
                 <div className={styles.head}>
                     <h1 className={styles.title}>
-                        <input  className={styles.title} autoFocus
+                        <input  className={styles.title}
+                                autoFocus
                                 name="title"
                                 type="text"
                                 placeholder="What do you want to know?"
@@ -223,7 +223,7 @@ export default class VoteComposer extends React.Component {
                     })}
                     <div className={styles.buttonBar}>
                         <a className={formCompleted ? styles.button :
-                            styles.button + ' ' + styles.disabled}
+                            (styles.button + ' ' + styles.disabled)}
                             onClick={formCompleted ? this.save : null}>Save</a>
                         <a className={styles.button} onClick={this.close}>Cancel</a>
                     </div>
@@ -233,8 +233,7 @@ export default class VoteComposer extends React.Component {
     }
 
     /**
-    @type Render function
-    @desc Renders the active or inactive form upon the props.active boolean
+    * Renders the active or inactive form upon the props.active boolean
     */
     render() {
         const {active} = this.props;

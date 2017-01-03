@@ -1,19 +1,21 @@
 import React from 'react';
 import VoteList from '../VoteList/VoteList';
 import VoteComposer from '../VoteComposer/VoteComposer';
+import { dd } from '../shared/toolbox';
 
 export default class VoteController extends React.Component {
     /**
-    @constructor
-    @param props with 'allVotes' to be used in the respective state
+    * @constructs VoteController
+    * @param {Object} props - Properties with 'allVotes' to be used
+    * in the respective state
     */
     constructor(props) {
         super(props);
 
         this.state = {
             allVotes: props.allVotes,
-            currentVoteId: null,
-            composerActive: false
+            //currentVoteId: null,
+            //composerActive: false
         };
         this.setCurrentVote = this.setCurrentVote.bind(this);
         this.registerVote = this.registerVote.bind(this);
@@ -23,30 +25,28 @@ export default class VoteController extends React.Component {
     }
 
     /**
-    @type Event handler
-    @param vote (object)
-    @desc Setting the state variable 'currentVoteId'. Respects the fact that
-        the VoteComposer component is active, so nothing
-        happens then to the list, vote should not be empty and the composer
-        should not be active
+    * Event handler, setting the state variable 'currentVoteId'. Respects the fact that
+    * the VoteComposer component is active, so nothing
+    * happens then to the list, vote should not be empty and the composer
+    * should not be active
+    * @param {Object} vote - the new currentVote
     */
     setCurrentVote(vote) {
-        if (vote) console.log(`Setting current vote: ${vote.id}`);
+        if (vote) dd('VoteController.setCurrentVote()', vote, 'vote');
         const { composerActive } = this.state;
         this.setState({currentVoteId: (vote && !composerActive) ? vote.id : null});
     }
 
     /**
-    @type internal
-    @see registerVote
-    @param vote (object) The vote for which we count a new choice
-    @param choice (object) The choice that was voted for
-    @return object newVote
-    @desc Takes a 'vote' and a 'choice' object in that vote and returns a copy
-        of that vote with the corresponding choice.count incremented by 1.
+    * Helper, takes a 'vote' and a 'choice' object in that vote and returns
+    * a copy of that vote with the corresponding choice.count incremented by 1.
+    * @see registerVote()
+    * @param {Object} vote - The vote for which we count a new choice
+    * @param {Object} - The choice that was voted for
+    * @return {Object} newVote
     */
     registerChoice(vote, choice) {
-        console.log(`Registering choice: ${choice.id}`);
+        dd('registerChoice()', choice.id, 'choice.id');
         // Construct an updated vote object
         const newVote = {
             ...vote, // object spread (ES6)
@@ -60,13 +60,13 @@ export default class VoteController extends React.Component {
     }
 
     /**
-    @type Event handler
+    * Event handler, replaces state object 'allVotes',
+    * calls @see registerChoice(vote, choice)
+    * to get a new vote object back with incremented choice.count
+    * for the corresponding 'vote' object.
     @see VotingComponent
-    @param vote (object) The vote whose state will be updated
-    @param choice (object) The choice that was chosen on the vote
-    @desc Replaces state object 'allVotes', calls @see registerChoice(vote, choice)
-        to get a new vote object back with incremented choice.count
-        for the corresponding 'vote' object.
+    @param {Object} vote - The vote whose state will be updated
+    @param {Object} choice - The choice that was chosen on the vote
     */
     registerVote(vote, choice) {
         const { allVotes } = this.state;
@@ -79,20 +79,19 @@ export default class VoteController extends React.Component {
     }
 
     /**
-    @type Event handler
-    @from VoteComposer
-    @param vote (object) The newly created vote
-    @desc Adds a new vote to the state 'allVotes'
+    * Event handler, adds a new vote object to the state 'allVotes'
+    * @param {Object} vote - The newly created vote
     */
     addVote(vote) {
+        dd('addVote()', vote, 'vote');
         const { allVotes } = this.state;
+        dd('addVote()', vote.id, 'vote.id');
         // Create a new object and "append" the new vote to it
         this.setState({allVotes: [...allVotes, vote]});
     }
 
     /**
-    @type Event handler
-    @desc Activates the vote composer component
+    * Event handler, activates the vote composer component
     */
     activateVoteComposer() {
         this.setState({
@@ -102,8 +101,7 @@ export default class VoteController extends React.Component {
     }
 
     /**
-    @type Event handler
-    @desc Deactivates the vote composer component
+    * Event handler, deactivates the vote composer component
     */
     deactivateVoteComposer() {
         this.setState({
@@ -111,6 +109,9 @@ export default class VoteController extends React.Component {
         });
     }
 
+    /**
+
+    */
     render() {
         const { allVotes, currentVoteId, composerActive } = this.state;
         return (

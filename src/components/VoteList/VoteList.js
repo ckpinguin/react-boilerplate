@@ -1,8 +1,15 @@
 import React from 'react';
 import VoteSummary from '../VoteSummary/VoteSummary';
 import VotingComponent from '../VotingComponent/VotingComponent';
+import { dd } from '../shared/toolbox';
 
+
+/**
+* @param {Object} obj - The properties
+*/
 export default function VoteList({ allVotes, currentVoteId, onSelectVote, onRegisterVote, onDismissVote }) {
+    dd('rendering VoteList()', allVotes, 'allVotes');
+    dd(currentVoteId, 'currentVoteId');
     return (
     <div>
         {allVotes.map((vote) => {
