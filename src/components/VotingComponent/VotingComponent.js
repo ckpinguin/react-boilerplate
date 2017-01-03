@@ -4,7 +4,7 @@ import styles from './styles.styl';
 
 // Stateless functional component (SFC) for displaying stuff and calling other
 // displaying components is enough
-export default function VotingComponent({vote, onDismissVote, onRegisterChoice}) {
+export default function VotingComponent({ vote, onDismissVote, onRegisterChoice }) {
     const totalVotes = vote.choices.reduce((prev, curr) => prev + curr.count, 0);
 
     return (

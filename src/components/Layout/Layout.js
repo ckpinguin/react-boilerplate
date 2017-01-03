@@ -13,7 +13,7 @@ export default function Layout({children}) {
             <NavBar />
             <div className={styles.main}>
                 <div className={styles.container}>
-                    {React.Children.map(children, c => <div key={c.id}>{c}</div>)}
+                    {children}
                 </div>
             </div>
         </div>

@@ -110,7 +110,6 @@ export default class VoteController extends React.Component {
     }
 
     /**
-
     */
     render() {
         const { allVotes, currentVoteId, composerActive } = this.state;
