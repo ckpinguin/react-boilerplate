@@ -9,13 +9,22 @@ function start(port, voteDatabase) {
     // this will let us get the data from a POST
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
+    app.use(function(req, res, next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        next();
+    });
 
     // ROUTES FOR OUR API
     // =============================================================================
     var router = express.Router();
     // GET
     router.get('/', function(req, res) {
-        res.json({message: 'hooraaaay! welcome to our api!'});
+        const msg = JSON.stringify({
+            message: 'hooraaaay! welcome to our api!'
+        }, null, 4);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(msg);
     });
     // POST
     router.post('/', function(req, res) {
