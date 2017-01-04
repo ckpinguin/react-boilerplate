@@ -19,8 +19,12 @@
   },
   "dependencies": {
     "babel-register": "^6.4.3",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
     "inert": "^4.1.0",
     "mongoose": "^4.3.6",
+    "multer": "^1.2.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   }
