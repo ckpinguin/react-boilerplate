@@ -1,6 +1,6 @@
-require('babel-register');
+require('babel-register'); // babel-transpile all required or imported stuff
 
-const VoteApp = require('./VoteApp').default;
+const VoteApp = require('./server.js').default;
 const useMongoDb = process.env.USE_MONGODB;
 
 const Database = useMongoDb
