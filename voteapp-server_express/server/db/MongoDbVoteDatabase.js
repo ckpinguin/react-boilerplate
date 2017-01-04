@@ -38,8 +38,8 @@ const VoteSchema = new mongoose.Schema({
 });
 
 VoteSchema.methods.snapshot = function() {
-    return {id: this.id, user: this.user, title: this.title, description: this.description, choices: this.choices}
-};
+    return {id: this.id, user: this.user, title: this.title,
+        description: this.description, choices: this.choices};};
 
 const VoteModel = mongoose.model('VoteModel', VoteSchema);
 
