@@ -15,13 +15,13 @@ function guid() {
  * @param {*} variable - The var to log to the console
  * @param {string} varName -  Optional, will appear as a label before the var
  */
-function dd(sender='', variable, varName) {
+function dd(variable, varName, sender='') {
     var varNameOutput;
 
     varName = varName || '';
     varNameOutput = varName ? varName + ':' : '';
 
-    console.info(sender + ' => ' + varNameOutput, variable, ' (' + (typeof variable) + ')');
+    console.debug(sender + ' => ' + varNameOutput, variable, ' (' + (typeof variable) + ')');
 }
 
 export { guid, dd };

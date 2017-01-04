@@ -2,13 +2,12 @@ import React from 'react';
 import styles from './styles.styl';
 import { guid, dd } from '../shared/toolbox';
 
-
 /**
 * Helper, creates an empty choice object
 */
 function emptyChoice() {
     const uuid = guid();
-    dd('emptyChoice()', uuid, 'uuid');
+    dd(uuid, 'uuid','emptyChoice()');
     return {
         id:     `choice_${uuid}`,
         count:  0,
@@ -21,7 +20,7 @@ function emptyChoice() {
 */
 function emptyVote() {
     const uuid = guid();
-    dd('emptyVote()', uuid, 'uuid');
+    dd(uuid, 'uuid', 'emptyVote()');
     return {
         id:             `vote_${uuid}`,
         title:          '',
@@ -43,7 +42,7 @@ export default class VoteComposer extends React.Component {
         this.state = {
             vote: emptyVote()
         };
-        dd('VoteComposer.construtor()', this.state, 'this.state');
+        dd(this.state, 'this.state','VoteComposer.construtor()');
         this.activateIfNeeded = this.activateIfNeeded.bind(this);
         this.save = this.save.bind(this);
         this.close = this.close.bind(this);
@@ -56,9 +55,9 @@ export default class VoteComposer extends React.Component {
     */
     close() {
         const { onDeactivate } = this.props;
-        dd('close()', onDeactivate, 'onDeactivate');
+        dd(onDeactivate, 'onDeactivate', 'close()');
         this.setState({ vote: emptyVote() }); // BUG!
-        dd('new state of VoteComposer', this.state, 'this.state');
+        dd(this.state, 'this.state');
         onDeactivate();
     }
 
@@ -73,7 +72,7 @@ export default class VoteComposer extends React.Component {
             // get rid of the empty choice from our "pool"
             choices: vote.choices.slice(0, -1)
         };
-        dd('VoteComposer.save()', newVote, 'newVote');
+        dd(newVote, 'newVote', 'VoteComposer.save()');
         onSave(newVote);
         this.close();
     }
@@ -83,7 +82,7 @@ export default class VoteComposer extends React.Component {
     */
     activateIfNeeded() {
         const { onActivate, active } = this.props;
-        dd('activateIfNeeded()', onActivate, 'onActivate');
+        dd(onActivate, 'onActivate', 'activateIfNeeded()');
         if (!active) {
             onActivate();
         }
@@ -101,7 +100,7 @@ export default class VoteComposer extends React.Component {
         let formCompleted =
             active && title && description && choicesCount > 1;
 
-        dd('isFormCompleted()', formCompleted, 'formCompleted');
+        dd(formCompleted, 'formCompleted', 'isFormCompleted()');
 
 
         if (formCompleted) {
@@ -129,11 +128,11 @@ export default class VoteComposer extends React.Component {
             // ES6 "computed property" as the fieldName will be the choice item
             [fieldName]: fieldValue
         };
-        dd('onChange()', newVote, 'newVote');
+        dd(newVote, 'newVote', 'onChange()');
         this.setState({
             vote: newVote
         });
-        dd('new state of VoteComposer', this.state, 'this.state');
+        dd(this.state, 'this.state');
 
     }
 
@@ -157,7 +156,7 @@ export default class VoteComposer extends React.Component {
         const newChoices =
             choices.map((c) => (c.id === choice.id ? newChoice : c));
 
-        dd('onChoiceChange()', newChoices, 'newChoices');
+        dd(newChoices, 'newChoices', 'onChoiceChange()');
         // add a new, empty choice field if we're currently in the last choice and the choice
         // has been new (empty) before. In other words: after entering the first character to the current last
         // choice add the field for the next choice
@@ -172,14 +171,14 @@ export default class VoteComposer extends React.Component {
                 choices: newChoices
             }
         });
-        dd('new state of VoteComposer', this.state, 'this.state');
+        dd(this.state, 'this.state');
     }
 
     /**
     * Helper, that renders the inactive form
     */
     renderInactiveForm() {
-        dd('renderInactiveForm()', null, null);
+        dd(null, null, 'renderInactiveForm()');
         return (
             <div className={[styles.row, styles.voteComposer, styles.spacer].join(' ')}
                 onClick={this.activateIfNeeded}>
@@ -201,7 +200,7 @@ export default class VoteComposer extends React.Component {
         const { vote: { title, description, choices }} = this.state;
         const formCompleted = this.isFormCompleted();
 
-        dd('renderActiveForm()', null, null);
+        dd(null, null, 'renderActiveForm()');
 
         return (
             <div className={[styles.row, styles.voteComposer, styles.spacer].join(' ')}>

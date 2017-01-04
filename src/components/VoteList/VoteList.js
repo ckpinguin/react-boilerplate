@@ -4,8 +4,8 @@ import VotingComponent from '../VotingComponent/VotingComponent';
 import { dd } from '../shared/toolbox';
 
 export default function VoteList({ allVotes, currentVoteId, onSelectVote, onRegisterVote, onDismissVote }) {
-    dd('VoteList()', allVotes, 'allVotes');
-    dd('VoteList()', currentVoteId, 'currentVoteId');
+    dd(allVotes, 'allVotes', 'VoteList()');
+    dd(currentVoteId, 'currentVoteId', 'VoteList()');
     return (
     <div>
         {allVotes.map((vote) => {

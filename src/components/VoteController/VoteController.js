@@ -46,7 +46,7 @@ export default class VoteController extends React.Component {
     * @return {Object} newVote
     */
     registerChoice(vote, choice) {
-        dd('registerChoice()', choice.id, 'choice.id');
+        dd(choice.id, 'choice.id', 'registerChoice()');
         // Construct an updated vote object
         const newVote = {
             ...vote, // object spread (ES6)
@@ -69,7 +69,7 @@ export default class VoteController extends React.Component {
     @param {Object} choice - The choice that was chosen on the vote
     */
     registerVote(vote, choice) {
-        dd('registerVote()', vote.id, 'vote.id');
+        dd(vote.id, 'vote.id', 'registerVote()');
         const { allVotes } = this.state;
         const newVotes = allVotes.map(
                 (v)=>v.id !== vote.id ? v : this.registerChoice(v, choice)
@@ -84,7 +84,7 @@ export default class VoteController extends React.Component {
     * @param {Object} vote - The newly created vote
     */
     addVote(vote) {
-        dd('addVote()', vote.id, 'vote.id');
+        dd(vote.id, 'vote.id', 'addVote()');
         const { allVotes } = this.state;
         // Create a new object and "append" the new vote to it
         this.setState({allVotes: [...allVotes, vote]});
@@ -94,7 +94,7 @@ export default class VoteController extends React.Component {
     * Event handler, activates the vote composer component
     */
     activateVoteComposer() {
-        dd('activateComposer()', null, null);
+        dd(null, null, 'activateComposer()');
         this.setState({
             currentVoteId: null,
             composerActive: true
