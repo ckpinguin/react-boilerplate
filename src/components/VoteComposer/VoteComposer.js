@@ -43,6 +43,7 @@ export default class VoteComposer extends React.Component {
             vote: emptyVote()
         };
         dd(this.state, 'this.state','VoteComposer.construtor()');
+
         this.activateIfNeeded = this.activateIfNeeded.bind(this);
         this.save = this.save.bind(this);
         this.close = this.close.bind(this);

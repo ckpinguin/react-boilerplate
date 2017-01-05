@@ -47,6 +47,13 @@ function start(port, voteDatabase) {
         res.send('Page Pattern Match');
     });
 
+    router.get('/votes', function(req, res) {
+        voteDatabase.getAllVotes((err, votes) => {
+            //res.setHeader('Content-Type', 'application/json');
+            res.send(votes);
+        });
+    });
+
     // REGISTER OUR ROUTES -------------------------------
     // all of our routes will be prefixed with /api
     app.use('/api', router);

@@ -53,7 +53,7 @@ const allVotes = [{
     ]
 }];
 
-const mainComponent = <VoteController allVotes={allVotes}/>;
+const mainComponent = <VoteController/>;
 ReactDOM.render(
     <Layout>{mainComponent}</Layout>,
         document.getElementById('root'));

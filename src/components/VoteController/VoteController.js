@@ -1,6 +1,7 @@
 import React from 'react';
 import VoteList from '../VoteList/VoteList';
 import VoteComposer from '../VoteComposer/VoteComposer';
+import {fetchJson} from '../../backend/Backend';
 import { dd } from '../shared/toolbox';
 
 export default class VoteController extends React.Component {
@@ -13,15 +14,25 @@ export default class VoteController extends React.Component {
         super(props);
 
         this.state = {
-            allVotes: props.allVotes,
-            //currentVoteId: null,
-            //composerActive: false
+            allVotes: []
         };
+
         this.setCurrentVote = this.setCurrentVote.bind(this);
         this.registerVote = this.registerVote.bind(this);
         this.addVote = this.addVote.bind(this);
         this.activateVoteComposer = this.activateVoteComposer.bind(this);
         this.deactivateVoteComposer = this.deactivateVoteComposer.bind(this);
+    }
+
+    /**
+    * Loading all votes from the database
+    */
+    componentDidMount() {
+        fetchJson('/api/votes').then(allVotes => {
+            this.setState({
+                allVotes
+            });
+        });
     }
 
     /**
@@ -133,7 +144,3 @@ export default class VoteController extends React.Component {
         );
     }
 }
-
-VoteController.propTypes = {
-    allVotes: React.PropTypes.array.isRequired
-};

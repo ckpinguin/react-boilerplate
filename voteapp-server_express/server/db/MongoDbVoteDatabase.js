@@ -7,7 +7,8 @@ const VoteSchema = new mongoose.Schema({
         unique: true
     },
     user: {
-        type: String
+        type: String,
+        required: false
     }, // not used yet
     title: {
         type: String,
@@ -72,9 +73,7 @@ const MongoDbVoteDatabase = {
             vote.id = mongoose.Types.ObjectId().toString();
             const mongoVote = new VoteModel(vote);
             return mongoVote.save(function(err, newVote) {
-                if (err) {
-                    return callback(err);
-                }
+                if (err) return callback(err);
                 return callback(null, newVote.snapshot());
             });
         }
