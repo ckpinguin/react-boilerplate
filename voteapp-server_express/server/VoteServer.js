@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 
 function start(port, voteDatabase) {
     var app = express();
@@ -9,6 +10,8 @@ function start(port, voteDatabase) {
     // this will let us get the data from a POST
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
+    // Allow CORS
+    app.use(cors());
     app.use(function(req, res, next) {
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -48,8 +51,11 @@ function start(port, voteDatabase) {
     });
 
     router.get('/votes', function(req, res) {
+        console.log('Got a GET request for /votes');
+        console.info('from: ' + req.ip + ', for: ' + req.hostname);
         voteDatabase.getAllVotes((err, votes) => {
-            //res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Accept', 'application/json');
+            res.setHeader('Content-Type', 'application/json');
             res.send(votes);
         });
     });
@@ -58,13 +64,14 @@ function start(port, voteDatabase) {
     // all of our routes will be prefixed with /api
     app.use('/api', router);
 
-    var server = app.listen(3000, '0.0.0.0', function(error) {
+    var server = app.listen(port, function(error) {
         if (error) {
             console.error(error);
         } else {
-            var host = server.address().address;
+            //var host = server.address().address;
             var port = server.address().port;
-            console.info('==> 🌎  Express is Listening on port %s. Visit http://localhost:%s/ in your browser.', host, port);
+            console.info('==> 🌎  Express is Listening on port ' + port
+                + '. Visit http://localhost:' + port + '/ in your browser.');
         }
     });
 }
