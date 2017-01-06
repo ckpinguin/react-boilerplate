@@ -52,7 +52,7 @@ function start(port, voteDatabase) {
 
     router.get('/votes', function(req, res) {
         console.log('Got a GET request for /votes');
-        console.info('from: ' + req.ip + ', for: ' + req.hostname);
+        console.info('from: ' + req.ip + ', for ' + req.hostname);
         voteDatabase.getAllVotes((err, votes) => {
             res.setHeader('Accept', 'application/json');
             res.setHeader('Content-Type', 'application/json');
@@ -69,9 +69,10 @@ function start(port, voteDatabase) {
             console.error(error);
         } else {
             //var host = server.address().address;
+            var host = server.address().address;
             var port = server.address().port;
-            console.info('==> 🌎  Express is Listening on port ' + port
-                + '. Visit http://localhost:' + port + '/ in your browser.');
+            console.info('==> 🌎  Express is Listening on ' + host + ':' + port
+                + '. Visit http://' + host + ':' + port + '/ in your browser.');
         }
     });
 }
