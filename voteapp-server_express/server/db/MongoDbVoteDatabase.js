@@ -97,7 +97,7 @@ export default {
         const url = 'mongodb://localhost/vote-db';
         console.log(`Connecting to '${url}'`);
         mongoose.connect(url, {}, (err) => {
-            return callback(err, MongoDbVoteDatabase);
+            return callback(err, MongoDbVoteDatabase); // callback defined error-first
         });
     }
 };

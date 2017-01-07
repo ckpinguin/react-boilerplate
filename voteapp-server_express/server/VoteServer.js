@@ -53,7 +53,7 @@ function start(port, voteDatabase) {
     router.get('/votes', function(req, res) {
         console.log('Got a GET request for /votes');
         console.info('from: ' + req.ip + ', for ' + req.hostname);
-        voteDatabase.getAllVotes((err, votes) => {
+        voteDatabase.getAllVotes((err, votes) => { // Error-First callback
             res.setHeader('Accept', 'application/json');
             res.setHeader('Content-Type', 'application/json');
             res.send(votes);

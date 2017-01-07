@@ -11,9 +11,10 @@ if (useMongoDb) {
     Database = require('./db/PostgresVoteDatabase').default;
 }
 
-Database.create((err, database) => {
+Database.create((err, database) => { // Error-First callback
     if (err) {
-        throw new Error(`Could not create db: ${err}`);
+        console.error('Error using database: ' + err);
+        return; // We quit app here...
     }
     console.log('Starting VoteApp...');
     VoteServer.start(3000, database);

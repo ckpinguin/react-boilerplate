@@ -48,6 +48,6 @@ const InMemoryVoteDatabase = {
 export default {
     create(callback) {
         console.log('Using InMemoryDatabase');
-        return callback(null, InMemoryVoteDatabase);
+        return callback(null, InMemoryVoteDatabase); // error-first callback
     }
 };

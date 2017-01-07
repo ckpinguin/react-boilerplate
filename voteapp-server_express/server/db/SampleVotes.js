@@ -63,28 +63,20 @@ export default[
         'choices' : [
             {
                 'id': 'choice_1',
-                'title': 'Depeche Mode',
+                'title': 'Elvis Presley',
                 'count': 1700
             }, {
                 'id': 'choice_2',
-                'title': 'Metallica',
+                'title': 'Johnny Cash',
                 'count': 2212
             }, {
                 'id': 'choice_3',
-                'title': 'Napalm Death',
+                'title': 'Aretha Franklin',
                 'count': 267
             }, {
                 'id': 'choice_4',
-                'title': 'Iron Maiden',
+                'title': 'Mississippi John Hurt',
                 'count': 1231
-            }, {
-                'id': 'choice_5',
-                'title': 'Motörhead',
-                'count': 800
-            }, {
-                'id': 'choice_6',
-                'title': 'The Fall',
-                'count': 1122
             }
         ]
     }

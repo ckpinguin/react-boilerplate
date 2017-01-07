@@ -8,7 +8,7 @@ export function fetchJson(path) {
     const url = `${BACKEND_URL}${path}`;
 
     console.info('Backend: fetchJson ' + path);
-    return fetch(url)
+    return fetch(url) // Returns a Promise
     .then(response => response.json())
     .catch(ex => { console.error('parsing failed', ex); });
 }
@@ -17,7 +17,7 @@ export function sendJson(method, path, payload={}) {
     const url = `${BACKEND_URL}${path}`;
 
     console.info('Backend: sendJson ' + method + ' ' + path);
-    return fetch(url, {
+    return fetch(url, { // Returns a Promise
         method:  method,
         body:    JSON.stringify(payload, null, 4),
         headers: {

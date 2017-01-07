@@ -1,84 +1,82 @@
+import Sequelize from 'sequelize';
 import pg from 'pg';
 
-const VoteSchema = new pg.Schema({
-    id: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    user: {
-        type: String,
-        required: false
-    }, // not used yet
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    choices: [
-        {
-            _id: false,
-            id: {
-                type: String,
-                required: true
-            },
-            title: {
-                type: String,
-                required: true
-            },
-            count: {
-                type: Number,
-                required: true,
-                default: 0
-            }
-        }
-    ]
+var sequelize = new Sequelize('voteapp', 'voteapp', 'voteapp', {
+    host: 'localhost',
+    dialect: 'postgres',
+
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+    }
 });
 
-VoteSchema.methods.snapshot = function() {
-    return {id: this.id, user: this.user, title: this.title,
-        description: this.description, choices: this.choices};};
+var Vote = sequelize.define('vote', {
+    user: {
+        type: Sequelize.STRING
+    },
+    title: {
+        type: Sequelize.STRING
+    },
+    description: {
+        type: Sequelize.TEXT
+    }
+});
 
-const VoteModel = pg.model('VoteModel', VoteSchema);
+var Choice = sequelize.define('choice', {
+    title: {
+        type: Sequelize.STRING
+    },
+    count: {
+        type: Sequelize.INTEGER,
+        length: 6
+    }
+});
 
-const MongoDbVoteDatabase = {
-    getAllVotes(callback) {
-        VoteModel.find({}, function(err, result) {
-            if (err) {
-                return callback(err);
+Choice.belongsTo(Vote);
+Vote.hasMany(Choice);
+
+const PostgresVoteDatabase = {
+    // TODO: This looks awful!
+    initialize(loadData) {
+        return Vote.sync({force: false}).then(function() {
+            return Choice.sync({force: false});
+        }).then(function() {
+            if (loadData) {
+                return Vote.create({title: 'Test1', description: 'Desc1'});
             }
-
-            return callback(null, result.map((vote) => vote.snapshot()));
+        }).then(function() {
+            if (loadData) {
+                return Choice.create({title: 'Choice 1', count: 12, voteId: 1});
+            }
+        }).catch(function(err) {
+            throw err;
         });
+    },
+
+    getAllVotes(callback) {
+        return Vote.findAll({include: [Choice]}).then((votes, err) => callback(err, votes) // callback defined as error-first
+        );
     },
 
     getVoteById(id, callback) {
-        VoteModel.findOne({
-            'id': id
-        }, function(err, vote) {
-            if (err) {
-                return callback(err);
-            }
-            callback(null, (vote
-                ? vote.snapshot()
-                : null));
-        });
+        return Vote.findById(id).then((vote, err) => callback(err, vote) // callback defined as error-first
+        );
     },
 
     store(vote, callback) {
         if (!vote.id) {
             vote.id = pg.Types.ObjectId().toString();
-            const mongoVote = new VoteModel(vote);
-            return mongoVote.save(function(err, newVote) {
-                if (err) return callback(err);
+            const postgresVote = new vote;
+            return postgresVote.save(function(err, newVote) {
+                if (err)
+                    return callback(err);
                 return callback(null, newVote.snapshot());
             });
         }
 
-        VoteModel.findOneAndUpdate({
+        find({
             'id': vote.id
         }, vote, {
             'new': 'true'
@@ -94,10 +92,7 @@ const MongoDbVoteDatabase = {
 
 export default {
     create(callback) {
-        const url = 'postgres://localhost/votedb';
-        console.log(`Connecting to '${url}'`);
-        pg.connect(url, {}, (err) => {
-            return callback(err, MongoDbVoteDatabase);
-        });
+        // callback is defined error-first (nodejs standard)
+        return callback(PostgresVoteDatabase.initialize(true), PostgresVoteDatabase);
     }
 };
