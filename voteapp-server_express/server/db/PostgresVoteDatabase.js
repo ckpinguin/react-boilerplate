@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize';
-import pg from 'pg';
+import {dd} from '../toolbox';
 
 var sequelize = new Sequelize('voteapp', 'voteapp', 'voteapp', {
     host: 'localhost',
@@ -13,11 +13,9 @@ var sequelize = new Sequelize('voteapp', 'voteapp', 'voteapp', {
 });
 
 var Vote = sequelize.define('vote', {
-    user: {
-        type: Sequelize.STRING
-    },
     title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
     },
     description: {
         type: Sequelize.TEXT
@@ -25,8 +23,9 @@ var Vote = sequelize.define('vote', {
 });
 
 var Choice = sequelize.define('choice', {
-    title: {
-        type: Sequelize.STRING
+    choiceTitle: {
+        type: Sequelize.STRING,
+        allowNull: false
     },
     count: {
         type: Sequelize.INTEGER,
@@ -35,64 +34,68 @@ var Choice = sequelize.define('choice', {
 });
 
 Choice.belongsTo(Vote);
-Vote.hasMany(Choice);
+Vote.hasMany(Choice, {onUpdate: 'cascade'});
 
 const PostgresVoteDatabase = {
-    // TODO: This looks awful!
-    initialize(loadData) {
-        return Vote.sync({force: false}).then(function() {
-            return Choice.sync({force: false});
-        }).then(function() {
-            if (loadData) {
-                return Vote.create({title: 'Test1', description: 'Desc1'});
-            }
-        }).then(function() {
-            if (loadData) {
-                return Choice.create({title: 'Choice 1', count: 12, voteId: 1});
-            }
+    // TODO: This looks awful and does not work right, please learn more about Promises
+    initialize() {
+        Promise.all([
+            Vote.sync({force: true}),
+            Choice.sync({force: true})
+        ]).then(function() {
+            return Promise.all([
+                Vote.create({title: 'Test1', description: 'Desc1'}),
+                Choice.create({choiceTitle: 'Choice 1', count: 12, voteId: 1}),
+                Choice.create({choiceTitle: 'Choice 2', count: 4, voteId: 1})
+            ]);
         }).catch(function(err) {
-            throw err;
+            return err;
         });
     },
 
     getAllVotes(callback) {
-        return Vote.findAll({include: [Choice]}).then((votes, err) => callback(err, votes) // callback defined as error-first
-        );
+        return Vote.findAll({include: [Choice]}).then((votes, err) => callback(err, votes));
     },
 
     getVoteById(id, callback) {
-        return Vote.findById(id).then((vote, err) => callback(err, vote) // callback defined as error-first
-        );
+        return Vote.findById(id, {include: [Choice]}).then((vote, err) => callback(err, vote));
     },
 
     store(vote, callback) {
-        if (!vote.id) {
-            vote.id = pg.Types.ObjectId().toString();
-            const postgresVote = new vote;
-            return postgresVote.save(function(err, newVote) {
-                if (err)
-                    return callback(err);
-                return callback(null, newVote.snapshot());
-            });
-        }
-
-        find({
-            'id': vote.id
-        }, vote, {
-            'new': 'true'
-        }, function(err, update) {
-            if (err) {
-                return callback(err);
-            }
-            return callback(null, update.snapshot());
+        return Vote.findById(vote.id, {
+            include: [
+                {
+                    model: Choice,
+                    as: 'choices'
+                }
+            ]
+        }).then(function(resVote) {
+            dd(resVote.choices[0], 'resVote.choices', 'PostgresVoteDatabase.store()');
+            // TODO: Make this dynamic and don't break API of VoteServer.js!
+            //let count = resVote.choices[0].count;
+            resVote.choices[0].updateAttributes({count: 120})
+            //return .update(
+                .then(function(res) {
+                    callback(null, res);
+                }).catch((err) => callback(err, null));
         });
+    },
 
+    // I have to break the API here for relational db's sake :(
+    getChoiceById(id) {
+        return Choice.findById(id);
+    },
+
+    storeChoice(choice, callback) {
+        dd(choice.count, 'choice.count', 'PostgresVoteDatabase.storeChoice()');
+        Choice.create(choice).then((result, err) => callback(err, result)).catch((err) => callback(err, null));
     }
+
 };
 
 export default {
     create(callback) {
         // callback is defined error-first (nodejs standard)
-        return callback(PostgresVoteDatabase.initialize(true), PostgresVoteDatabase);
+        return callback(PostgresVoteDatabase.initialize(), PostgresVoteDatabase);
     }
 };

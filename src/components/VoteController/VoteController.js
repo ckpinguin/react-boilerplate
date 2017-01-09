@@ -1,20 +1,19 @@
 import React from 'react';
 import VoteList from '../VoteList/VoteList';
 import VoteComposer from '../VoteComposer/VoteComposer';
-import {fetchJson} from '../../backend/Backend';
-import { dd } from '../shared/toolbox';
+import {fetchJson, sendJson} from '../../backend/Backend';
+import {dd} from '../shared/toolbox';
 
 export default class VoteController extends React.Component {
     /**
     * @constructs VoteController
-    * @param {Object} props - Properties with 'allVotes' to be used
-    * in the respective state
     */
     constructor(props) {
         super(props);
 
         this.state = {
-            allVotes: []
+            allVotes: [],
+            currentVote: null
         };
 
         this.setCurrentVote = this.setCurrentVote.bind(this);
@@ -29,9 +28,7 @@ export default class VoteController extends React.Component {
     */
     componentDidMount() {
         fetchJson('/api/votes').then(allVotes => {
-            this.setState({
-                allVotes
-            });
+            this.setState({allVotes});
         });
     }
 
@@ -43,31 +40,10 @@ export default class VoteController extends React.Component {
     * @param {Object} vote - the new currentVote
     */
     setCurrentVote(vote) {
-        if (vote) dd('VoteController.setCurrentVote()', vote, 'vote');
-        const { composerActive } = this.state;
-        this.setState({currentVoteId: (vote && !composerActive) ? vote.id : null});
-    }
-
-    /**
-    * Helper, takes a 'vote' and a 'choice' object in that vote and returns
-    * a copy of that vote with the corresponding choice.count incremented by 1.
-    * @see registerVote()
-    * @param {Object} vote - The vote for which we count a new choice
-    * @param {Object} - The choice that was voted for
-    * @return {Object} newVote
-    */
-    registerChoice(vote, choice) {
-        dd(choice.id, 'choice.id', 'registerChoice()');
-        // Construct an updated vote object
-        const newVote = {
-            ...vote, // object spread (ES6)
-            choices: // overwrite the choices of the above object spread,
-            // because we save the count in the corresponding choice itself
-                vote.choices.map((c) => c.id !== choice.id ? c :
-                {...c, count: c.count + 1 }
-            )
-        };
-        return newVote;
+        dd(vote, 'vote', 'VoteController.setCurrentVote()');
+        this.setState({
+            currentVoteId: vote && !this.state.composerActive ? vote.id : null
+        });
     }
 
     /**
@@ -81,13 +57,14 @@ export default class VoteController extends React.Component {
     */
     registerVote(vote, choice) {
         dd(vote.id, 'vote.id', 'registerVote()');
-        const { allVotes } = this.state;
-        const newVotes = allVotes.map(
-                (v)=>v.id !== vote.id ? v : this.registerChoice(v, choice)
-            );
-        this.setState({
-            allVotes: newVotes
-        });
+        sendJson('put', `/api/votes/${vote.id}/choices/${choice.id}/vote`).then(updatedVote => {
+            // excchange old with updated vote
+            const newAllVotes = this.state.allVotes.map(vote => vote.id === updatedVote.id
+                ? updatedVote
+                : vote);
+            this.setState({allVotes: newAllVotes});
+            this.setCurrentVote(updatedVote);
+        }).catch((err) => console.error(err));
     }
 
     /**
@@ -96,9 +73,14 @@ export default class VoteController extends React.Component {
     */
     addVote(vote) {
         dd(vote.id, 'vote.id', 'addVote()');
-        const { allVotes } = this.state;
+        const {allVotes} = this.state;
         // Create a new object and "append" the new vote to it
-        this.setState({allVotes: [...allVotes, vote]});
+        this.setState({
+            allVotes: [
+                ...allVotes,
+                vote
+            ]
+        });
     }
 
     /**
@@ -106,41 +88,30 @@ export default class VoteController extends React.Component {
     */
     activateVoteComposer() {
         dd(null, null, 'activateComposer()');
-        this.setState({
-            currentVoteId: null,
-            composerActive: true
-        });
+        this.setState({currentVoteId: null, composerActive: true});
     }
 
     /**
     * Event handler, deactivates the vote composer component
     */
     deactivateVoteComposer() {
-        this.setState({
-            composerActive: false
-        });
+        this.setState({composerActive: false});
     }
 
     /**
     */
     render() {
-        const { allVotes, currentVoteId, composerActive } = this.state;
+        const {allVotes, currentVoteId, composerActive} = this.state;
         return (
-        <div>
-            <VoteList   allVotes={allVotes}
-                        currentVoteId={currentVoteId}
-                        // select vote
-                        onSelectVote={this.setCurrentVote}
-                        // Collapse the opened vote and render the list sagain from here
-                        onDismissVote={()=>{this.setCurrentVote(null);}}
-                        onRegisterVote={this.registerVote}
-            />
-            <VoteComposer   active={composerActive}
-                            onDeactivate={this.deactivateVoteComposer}
-                            onActivate={this.activateVoteComposer}
-                            onSave={this.addVote}
-            />
-        </div>
+            <div>
+                <VoteList allVotes={allVotes} currentVoteId={currentVoteId} // select vote
+                    onSelectVote={this.setCurrentVote} // Collapse the opened vote and render the list sagain from here
+                    onDismissVote={() => {
+                        this.setCurrentVote(null);
+                    }}
+                    onRegisterVote={this.registerVote}/>
+                <VoteComposer active={composerActive} onDeactivate={this.deactivateVoteComposer} onActivate={this.activateVoteComposer} onSave={this.addVote}/>
+            </div>
         );
     }
 }

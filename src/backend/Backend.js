@@ -1,5 +1,5 @@
 import 'isomorphic-fetch';
-import 'babel-polyfill';
+import 'babel-polyfill'; // for Promises in older browsers
 
 //const BACKEND_URL = __API_SERVER_URL__;
 const BACKEND_URL = 'http://mdbserver:3000';
@@ -27,5 +27,4 @@ export function sendJson(method, path, payload={}) {
     })
     .then(response => response.json())
     .catch(ex => { console.error('parsing failed', ex); });
-
 }

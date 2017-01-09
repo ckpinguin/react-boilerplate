@@ -14,7 +14,7 @@ if (useMongoDb) {
 Database.create((err, database) => { // Error-First callback
     if (err) {
         console.error('Error using database: ' + err);
-        return; // We quit app here...
+        return; // Server stops here...
     }
     console.log('Starting VoteApp...');
     VoteServer.start(3000, database);
