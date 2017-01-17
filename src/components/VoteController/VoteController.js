@@ -57,7 +57,8 @@ export default class VoteController extends React.Component {
     */
     registerVote(vote, choice) {
         dd(vote.id, 'vote.id', 'registerVote()');
-        sendJson('put', `/api/votes/${vote.id}/choices/${choice.id}/vote`).then(updatedVote => {
+        sendJson('put', `/api/votes/${vote.id}/choices/${choice.id}/vote`)
+        .then(updatedVote => {
             // excchange old with updated vote
             const newAllVotes = this.state.allVotes.map(vote => vote.id === updatedVote.id
                 ? updatedVote
@@ -73,13 +74,11 @@ export default class VoteController extends React.Component {
     */
     addVote(vote) {
         dd(vote.id, 'vote.id', 'addVote()');
-        const {allVotes} = this.state;
-        // Create a new object and "append" the new vote to it
-        this.setState({
-            allVotes: [
-                ...allVotes,
-                vote
-            ]
+        sendJson('post', '/api/votes', vote)
+        .then(receivedVote => {
+            this.setState({
+                allVotes: [...this.state.allVotes, receivedVote]
+            });
         });
     }
 

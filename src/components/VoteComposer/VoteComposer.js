@@ -22,7 +22,6 @@ function emptyVote() {
     const uuid = guid();
     dd(uuid, 'uuid', 'emptyVote()');
     return {
-        id:             `vote_${uuid}`,
         title:          '',
         description:    '',
         formCompleted:  false,
@@ -57,7 +56,7 @@ export default class VoteComposer extends React.Component {
     close() {
         const { onDeactivate } = this.props;
         dd(onDeactivate, 'onDeactivate', 'close()');
-        this.setState({ vote: emptyVote() }); // BUG!
+        this.setState({ vote: emptyVote() }); // BUG?
         dd(this.state, 'this.state');
         onDeactivate();
     }

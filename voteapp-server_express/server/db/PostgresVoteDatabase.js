@@ -34,19 +34,20 @@ var Choice = sequelize.define('choice', {
 });
 
 Choice.belongsTo(Vote);
-Vote.hasMany(Choice, {onUpdate: 'cascade'});
+Vote.hasMany(Choice);
 
 const PostgresVoteDatabase = {
     // TODO: This looks awful and does not work right, please learn more about Promises
     initialize() {
-        Promise.all([
-            Vote.sync({force: true}),
-            Choice.sync({force: true})
-        ]).then(function() {
-            return Promise.all([
-                Vote.create({title: 'Test1', description: 'Desc1'}),
-                Choice.create({choiceTitle: 'Choice 1', count: 12, voteId: 1}),
-                Choice.create({choiceTitle: 'Choice 2', count: 4, voteId: 1})
+            Vote.sync({force: true})
+            .then(function() {
+                return Choice.sync({force: true});
+            })
+            .then(function() {
+                return Promise.all([
+                    Vote.create({title: 'Test1', description: 'Desc1'}),
+                    Choice.create({choiceTitle: 'Choice 1', count: 12, voteId: 1}),
+                    Choice.create({choiceTitle: 'Choice 2', count: 4, voteId: 1})
             ]);
         }).catch(function(err) {
             return err;

@@ -25,7 +25,7 @@ function start(port, voteDatabase) {
     // GET
     router.get('/', function(req, res) {
         const msg = JSON.stringify({
-            message: 'hooraaaay! welcome to our api!'
+            message: 'Hooraaaay! welcome to our api!'
         }, null, 4);
         res.setHeader('Content-Type', 'application/json');
         res.send(msg);
@@ -79,54 +79,49 @@ function start(port, voteDatabase) {
         });
     });
 
+    router.get('/votes/:voteId/choices/:choiceId', function(req, res) {
+        const voteId = req.params.voteId;
+        const choiceId = req.params.choiceId;
+        console.log('Got a GET request for /votes/' + voteId + '/choices/'
+                    + choiceId);
+        console.info('from: ' + req.ip + ', for ' + req.hostname);
+        voteDatabase.getVoteById(voteId, (err, vote) => {
+            if (!vote) {
+                res.status(404).send(`Invalid Vote id '${voteId}'`);
+            } else {
+                const choice = vote.choices.find((c) => c.id === choiceId);
+                if (!choice) {
+                    // invalid choice
+                    res.status(404).send(`Invalid Choice id '${choiceId}'`);
+                } else {
+                    res.send(choice);
+                }
+            }
+        });
+    });
+
     router.put('/votes/:voteId/choices/:choiceId/vote', function(req, res) {
-        const voteId = parseInt(req.params.voteId);
-        const choiceId = parseInt(req.params.choiceId);
+        const voteId = req.params.voteId;
+        const choiceId = req.params.choiceId;
         console.log(`Got a PUT request for '/votes/${voteId}/choices/${choiceId}/vote`);
         console.info('from: ' + req.ip + ', for ' + req.hostname);
         dd(choiceId, 'choiceId', `VoteServer.router.put(/votes/${voteId}/choices/${choiceId}/vote)`);
         voteDatabase.getVoteById(voteId, (err, vote) => {
             if (!vote) {
                 res.status(404).send(`Invalid Vote id '${voteId}'`);
-                return;
+            } else {
+                const choice = vote.choices.find((c) => c.id === choiceId);
+                if (!choice) {
+                    // invalid choice
+                    res.status(404).send(`Invalid Choice id '${choiceId}'`);
+                } else {
+                    // increment count
+                    choice.count = choice.count + 1;
+                    // save vote
+                    voteDatabase.store(vote, (err, storedVote) => {
+                        res.send(storedVote);
+                    });                }
             }
-            //dd(vote, 'vote (full)', `VoteServer.router.put(/votes/${voteId}/choices/${choiceId}/vote)`);
-            // Why, oh why is choiceId not treated as integer? Now I have to use
-            // the "evil twin" (D. Crockford) == instead of ===
-            // The Hapi server seems to implicitly convert to numbers (see react book)
-            //dd(vote.choices, 'vote.choices', `VoteServer.router.put(/votes/${voteId}/choices/${choiceId}/vote)`);
-            const choice = vote.choices.find((c) => c.id === choiceId);
-            if (!choice) {
-                res.status(404).send(`Invalid Choice id '${choiceId}'`);
-                return;
-            }
-            dd(choice.id, 'found choice.id',
-                `VoteServer.router.put(/votes/${voteId}/choices/${choiceId}/vote)`);
-            //dd(updatedChoices, 'updatedChoices (full & incremented count)');
-            const oldCount = vote.choices.find((c) => c.id === choiceId).count;
-            vote.choices.find((c) => c.id === choiceId).count += 1;
-            console.log('Updated vote object with incremented choice.id: '
-                + choice.id + ' old count: '
-                + oldCount + ' new count: '
-                + vote.choices.find((c) => c.id === choiceId).count);
-            // vote.choices = updatedChoices;
-            //dd(vote, 'vote (full & incremented choice count)');
-            //dd(vote.choices[0], 'vote.choices[0] (updated)');
-            //dd(vote.choices[1], 'vote.choices[1] (updated)');
-            // save vote with updated choice
-            voteDatabase.store(vote, (err, storedVote) => {
-                if (err) {
-                    res.send(err);
-                    //throw Error(err.name + ' => ' + err.message);
-                    return;
-                }
-                //dd(storedVote, 'storedVote', 'VoteServer.voteDatabase.store()');
-                //dd(storedVote.choices, 'storedVote.choices', 'VoteServer.voteDatabase.store()');
-                dd(storedVote.choices[0].count, 'storedVote.choices[0].count');
-                dd(storedVote.choices[1].count, 'storedVote.choices[1].count');
-                res.type('application/json');
-                res.send(storedVote);
-            });
         });
     });
 
