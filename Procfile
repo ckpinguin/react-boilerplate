@@ -1,1 +1,1 @@
-web: NODE_ENV=production node server.js
+web: USE_MONGODB=true node voteapp-server_express/server/index.js
