@@ -1,116 +1,111 @@
 {
-  "__v": 0,
-  "_id": {
-    "$oid": "561a665a0553b9fe3870dfc2"
-  },
-  "choices": [
-    {
-      "count": 7,
-      "id": "choice_1",
-      "title": "Good"
+    "__v": 0,
+    "_id": {
+        "$oid": "561a665a0553b9fe3870dfc2"
     },
-    {
-      "count": 12,
-      "id": "choice_2",
-      "title": "Bad"
+    "choices": [{
+            "id": 1,
+            "count": 7,
+            "title": "Good"
+        },
+        {
+            "id": 2,
+            "count": 12,
+            "title": "Bad"
+        },
+        {
+            "id": 3,
+            "count": 1,
+            "title": "Not sure yet"
+        }
+    ],
+    "id": 1,
+    "description": "Tell me: how has your day been so far?",
+    "title": "How is your day?",
+    "user": "Peter"
+} {
+    "__v": 0,
+    "_id": {
+        "$oid": "561a665a0553b9fe3870dfc3"
     },
-    {
-      "count": 1,
-      "id": "choice_3",
-      "title": "Not sure yet"
-    }
-  ],
-  "description": "Tell me: how has your day been so far?",
-  "id": "vote_1",
-  "title": "How is your day?",
-  "user": "Peter"
-}
-{
-  "__v": 0,
-  "_id": {
-    "$oid": "561a665a0553b9fe3870dfc3"
-  },
-  "choices": [
-    {
-      "count": 2,
-      "id": "choice_1",
-      "title": "raw"
+    "choices": [{
+            "id": 1,
+            "count": 2,
+            "title": "raw"
+        },
+        {
+            "id": 2,
+            "count": 3,
+            "title": "blue rare"
+        },
+        {
+            "id": 3,
+            "count": 5,
+            "title": "rare"
+        },
+        {
+            "id": 4,
+            "count": 15,
+            "title": "medium rare"
+        },
+        {
+            "id": 5,
+            "count": 32,
+            "title": "medium"
+        },
+        {
+            "id": 6,
+            "count": 12,
+            "title": "medium well"
+        },
+        {
+            "id": 7,
+            "count": 1,
+            "title": "well done"
+        }
+    ],
+    "id": 2,
+    "description": "How do you prefer your steak?",
+    "title": "Steaks!",
+    "user": "Joe"
+} {
+    "__v": 0,
+    "_id": {
+        "$oid": "561a665a0553b9fe3870dfc4"
     },
-    {
-      "count": 3,
-      "id": "choice_2",
-      "title": "blue rare"
-    },
-    {
-      "count": 5,
-      "id": "choice_3",
-      "title": "rare"
-    },
-    {
-      "count": 15,
-      "id": "choice_4",
-      "title": "medium rare"
-    },
-    {
-      "count": 32,
-      "id": "choice_5",
-      "title": "medium"
-    },
-    {
-      "count": 12,
-      "id": "choice_6",
-      "title": "medium well"
-    },
-    {
-      "count": 1,
-      "id": "choice_7",
-      "title": "well done"
-    }
-  ],
-  "description": "How do you prefer your steak?",
-  "id": "vote_2",
-  "title": "Steaks!",
-  "user": "Joe"
-}
-{
-  "__v": 0,
-  "_id": {
-    "$oid": "561a665a0553b9fe3870dfc4"
-  },
-  "choices": [
-    {
-      "count": 1700,
-      "id": "choice_1",
-      "title": "Johnny Cash"
-    },
-    {
-      "count": 2212,
-      "id": "choice_2",
-      "title": "Elvis Presley"
-    },
-    {
-      "count": 267,
-      "id": "choice_3",
-      "title": "Bluegrass Band"
-    },
-    {
-      "count": 1231,
-      "id": "choice_4",
-      "title": "Bagpipe Group"
-    },
-    {
-      "count": 800,
-      "id": "choice_5",
-      "title": "Aretha Franklin"
-    },
-    {
-      "count": 1122,
-      "id": "choice_6",
-      "title": "Mississippi John Hurt"
-    }
-  ],
-  "description": "What music are you listening to?",
-  "id": "vote_3",
-  "title": "Favorite band",
-  "user": "Marry"
+    "choices": [{
+            "id": 1,
+            "count": 1700,
+            "title": "Johnny Cash"
+        },
+        {
+            "id": 2,
+            "count": 2212,
+            "title": "Elvis Presley"
+        },
+        {
+            "id": 3,
+            "count": 267,
+            "title": "Bluegrass Band"
+        },
+        {
+            "id": 4,
+            "count": 1231,
+            "title": "Bagpipe Group"
+        },
+        {
+            "id": 5,
+            "count": 800,
+            "title": "Aretha Franklin"
+        },
+        {
+            "id": 7,
+            "count": 1122,
+            "title": "Mississippi John Hurt"
+        }
+    ],
+    "id": 3,
+    "description": "What music are you listening to?",
+    "title": "Favorite band",
+    "user": "Marry"
 }

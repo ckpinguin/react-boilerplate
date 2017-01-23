@@ -26,7 +26,7 @@ export default function VoteList({ allVotes, currentVoteId, onSelectVote, onRegi
 
 VoteList.propTypes = {
     allVotes:       React.PropTypes.array.isRequired,
-    currentVoteId:  React.PropTypes.string,
+    currentVoteId:  React.PropTypes.number,
     onSelectVote:   React.PropTypes.func.isRequired,
     onRegisterVote: React.PropTypes.func.isRequired,
     onDismissVote:  React.PropTypes.func.isRequired

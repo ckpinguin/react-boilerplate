@@ -8,7 +8,7 @@ function start(port, voteDatabase) {
     var app = express();
 
     // configure app to use bodyParser()
-    // this will let us get the data from a POST
+    // this will let us get the data from a P           OST
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
     // Allow CORS
@@ -80,8 +80,8 @@ function start(port, voteDatabase) {
     });
 
     router.get('/votes/:voteId/choices/:choiceId', function(req, res) {
-        const voteId = req.params.voteId;
-        const choiceId = req.params.choiceId;
+        const voteId = parseInt(req.params.voteId);
+        const choiceId = parseInt(req.params.choiceId);
         console.log('Got a GET request for /votes/' + voteId + '/choices/'
                     + choiceId);
         console.info('from: ' + req.ip + ', for ' + req.hostname);
@@ -101,8 +101,8 @@ function start(port, voteDatabase) {
     });
 
     router.put('/votes/:voteId/choices/:choiceId/vote', function(req, res) {
-        const voteId = req.params.voteId;
-        const choiceId = req.params.choiceId;
+        const voteId = parseInt(req.params.voteId);
+        const choiceId = parseInt(req.params.choiceId);
         console.log(`Got a PUT request for '/votes/${voteId}/choices/${choiceId}/vote`);
         console.info('from: ' + req.ip + ', for ' + req.hostname);
         dd(choiceId, 'choiceId', `VoteServer.router.put(/votes/${voteId}/choices/${choiceId}/vote)`);
@@ -118,9 +118,13 @@ function start(port, voteDatabase) {
                     // increment count
                     choice.count = choice.count + 1;
                     // save vote
-                    voteDatabase.store(vote, (err, storedVote) => {
-                        res.send(storedVote);
-                    });                }
+                    voteDatabase.store(vote, (err, vote) => {
+                        dd(choice.id, 'choice.id', 'VoteServer: choice.id to be stored');
+                        dd(choice.count, 'choice.count', 'VoteServer: choice.count to be stored');
+                        //dd(vote.choice, 'vote.choice', 'vote.choice to be stored');
+                        res.send(vote);
+                    });
+                }
             }
         });
     });

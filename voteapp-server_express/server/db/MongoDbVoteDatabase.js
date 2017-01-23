@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const VoteSchema = new mongoose.Schema({
     id: {
-        type: String,
+        type: Number,
         required: true,
         unique: true
     },
@@ -22,7 +22,7 @@ const VoteSchema = new mongoose.Schema({
         {
             _id: false,
             id: {
-                type: String,
+                type: Number,
                 required: true
             },
             title: {

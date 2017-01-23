@@ -19,6 +19,7 @@ export default function VotingComponent({ vote, onDismissVote, onRegisterChoice 
                 <div>
                     {vote.choices.map(choice =>
                         <ChoiceBar key={choice.id}
+                        title={choice.choiceTitle}
                         onClickHandler={() => onRegisterChoice(choice)}
                         percent={choice.count * (100 / totalVotes)}
                         {...choice}/>
