@@ -23,9 +23,13 @@ module.exports = webpackMerge(commonConfig, {
             //mangle: true,
             mangle: {
                 keep_fnames: true
+            },
+            compress: {
+                warnings: false
             }
         }),
-        new ExtractTextPlugin('[name].[hash].css', { allChunks: true }),
+        // This makes css-modules-require-hook a dependency (like babel-register)
+        new ExtractTextPlugin('[name].[hash].css'),
         new webpack.DefinePlugin({
             'process.env': {
                 'ENV': JSON.stringify(ENV)

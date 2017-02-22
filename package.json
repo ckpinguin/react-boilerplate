@@ -12,12 +12,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:clean": "rimraf ./dist",
-    "build:prod": "npm run build:clean && cross-env NODE_ENV=production webpack -p --config config/webpack.config.prod.js",
+    "build:prod": "npm run build:clean && cross-env NODE_ENV=production webpack --config config/webpack.config.prod.js",
     "build:watch": "babel --watch=./src --out-dir=./build",
-    "start": "npm run dev",
+    "start": "npm run dev:webpack",
     "serve": "lite-server -c=bs-config.json",
     "dev": "concurrently \"npm run build:watch\" \"npm run serve\"",
-    "dev:webpack": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.dev.js --display-error-details --host 192.168.225.150 --inline --hot --progress --colors",
+    "dev:webpack": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.dev.js --host 192.168.225.150 --inline --hot --progress --colors",
     "server:dev": "nodemon server.js",
     "server:prod": "cross-env NODE_ENV=production node server.js"
   },
@@ -27,6 +27,7 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "body-parser": "^1.16.1",
+    "css-modules-require-hook": "^4.0.5",
     "express": "^4.14.1",
     "isomorphic-fetch": "^2.2.1",
     "react": "^15.4.2",
@@ -81,6 +82,7 @@
     "url-loader": "^0.5.7",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1",
+    "webpack-hot-middleware": "^2.17.0",
     "webpack-merge": "^3.0.0",
     "webpack-validator": "^2.3.0",
     "zone.js": "^0.7.7"

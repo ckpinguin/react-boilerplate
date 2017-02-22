@@ -10,10 +10,6 @@ module.exports = {
         vendor: helpers.root('src', 'client', 'vendor.js'),
         app: helpers.root('src', 'client', 'main.js'),
     },
-    // Read: http://webpack.github.io/docs/configuration.html#resolve-extensions
-    resolve: {
-        extensions: ['', '.js']
-    },
     externals: [],
     plugins: [
         // Workaround for angular/angular#11580
@@ -51,14 +47,12 @@ module.exports = {
             // First, run the linter.
             // It's important to do this before Babel processes the JS.
             {
-                test: /\.(js|jsx)$/,
+                test: /\.jsx?$/,
                 loader: 'eslint-loader',
                 enforce: 'pre',
-                exclude: /node_modules/
             },
             {
-                test: /\.(js|jsx)$/,
-                exclude: /node_modules/,
+                test: /\.jsx?$/,
                 use: {
                     loader: 'babel-loader',
                     query: {
@@ -75,7 +69,6 @@ module.exports = {
             },
             {
                 test: /\.json$/,
-                exclude: /node_modules/,
                 loader: 'json-loader'
             },
             {
@@ -87,8 +80,11 @@ module.exports = {
                 exclude: helpers.root('src', 'components'),
                 loader: ExtractTextPlugin.extract(
                     {
-                        fallbackLoader: 'style-loader',
-                        loader: 'css-loader?sourceMap'
+                        fallback: 'style-loader',
+                        use: [
+                            'css-loader?sourceMap',
+                            'postcss-loader'
+                        ]
                     }
                 )
             },
@@ -97,14 +93,11 @@ module.exports = {
             * them as strings via the raw loader — which is what Angular expects
             * to do with styles specified in a styleUrls metadata property.
             */
-            /*
             {
                 test: /\.css$/,
                 include: helpers.root('src', 'components'),
                 loader: 'raw-loader'
-            },            */
-
-
+            },
             {
                 test: /\.styl$/,
                 use: ExtractTextPlugin.extract(
