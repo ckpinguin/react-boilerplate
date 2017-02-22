@@ -3,16 +3,9 @@ const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const commonConfig = require('./webpack.config.common.js');
 const helpers = require('./helpers');
-const path = require('path');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
-const PATHS = {
-    src: path.resolve(__dirname, '../src'),
-    dist: path.resolve(__dirname, '../dist'),
-    publicPathDev: '/',
-    publicPathProd: './'
-};
 
 module.exports = webpackMerge(commonConfig, {
     devtool: 'source-map',
@@ -23,7 +16,7 @@ module.exports = webpackMerge(commonConfig, {
         chunkFilename: '[id].[hash].chunk.js'
     },
     plugins: [
-        new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.NoEmitOnErrorsPlugin(), // stop building on failure
         new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
             minimize: true,
             sourceMap: false,
@@ -41,7 +34,7 @@ module.exports = webpackMerge(commonConfig, {
         new webpack.LoaderOptionsPlugin({
             htmlLoader: {
                 //minimize: false // workaround for ng2
-                minimize: true
+                minimize: false
             }
         })
     ]

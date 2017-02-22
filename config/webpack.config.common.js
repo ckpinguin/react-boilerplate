@@ -1,28 +1,27 @@
-const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const helpers = require('./helpers');
-//const poststylus = require('poststylus');
 
-const PATHS = {
-    src: path.resolve(__dirname, '../src'),
-    dist: path.resolve(__dirname, '../dist'),
-    publicPathDev: '/',
-    publicPathProd: './'
-};
 
 module.exports = {
     entry: {
-        polyfills: path.resolve(PATHS.src, 'polyfills.js'),
-        vendor: path.resolve(PATHS.src, 'vendor.js'),
-        app: path.resolve(PATHS.src, 'main.js'),
+        polyfills: helpers.root('src/client/polyfills.js'),
+        vendor: helpers.root('src/client/vendor.js'),
+        app: helpers.root('src/client/main.js'),
     },
     resolve: {
-        extensions: ['.js']
+        extensions: ['.ts', '.js']
     },
     externals: [],
     plugins: [
+        // Workaround for angular/angular#11580
+        new webpack.ContextReplacementPlugin(
+          // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+            helpers.root('./src'), // location of your src
+            {} // a map of your routes
+        ),
         /**
         * Of course the application code imports vendor code. Webpack itself is
         * not smart enough to keep the vendor code out of the app.js bundle.
@@ -50,16 +49,14 @@ module.exports = {
             // It's important to do this before Babel processes the JS.
             {
                 test: /\.(js|jsx)$/,
-                use: 'eslint-loader',
+                loader: 'eslint-loader',
                 enforce: 'pre',
                 exclude: /node_modules/
             },
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader'
-                }
+                loader: 'babel-loader'
             },
             {
                 test: /\.html$/,
@@ -68,7 +65,7 @@ module.exports = {
             {
                 test: /\.json$/,
                 exclude: /node_modules/,
-                use: 'json-loader'
+                loader: 'json-loader'
             },
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
@@ -76,7 +73,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                exclude: helpers.root('src', 'app'),
+                exclude: helpers.root('src', 'components'),
                 loader: ExtractTextPlugin.extract(
                     {
                         fallbackLoader: 'style-loader',
@@ -89,11 +86,14 @@ module.exports = {
             * them as strings via the raw loader — which is what Angular expects
             * to do with styles specified in a styleUrls metadata property.
             */
+            /*
             {
                 test: /\.css$/,
-                include: helpers.root('src', 'app'),
+                include: helpers.root('src', 'components'),
                 loader: 'raw-loader'
-            },
+            },            */
+
+
             {
                 test: /\.styl$/,
                 use: ExtractTextPlugin.extract(
