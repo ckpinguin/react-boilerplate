@@ -27,12 +27,9 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "body-parser": "^1.16.1",
-    "bootstrap": "^3.3.7",
     "express": "^4.14.1",
-    "font-awesome": "^4.7.0",
     "isomorphic-fetch": "^2.2.1",
     "react": "^15.4.2",
-    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.2"
   },
   "devDependencies": {
@@ -46,6 +43,7 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-3": "^6.22.0",
     "concurrently": "^3.3.0",
+    "core-js": "^2.4.1",
     "cross-env": "^3.1.4",
     "css-loader": "^0.26.1",
     "eslint": "^3.16.0",
@@ -84,6 +82,7 @@
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.1",
     "webpack-merge": "^3.0.0",
-    "webpack-validator": "^2.3.0"
+    "webpack-validator": "^2.3.0",
+    "zone.js": "^0.7.7"
   }
 }

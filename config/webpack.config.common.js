@@ -36,9 +36,11 @@ module.exports = {
             ]
         }),
         // inject the resulting js and cs files
-        new HtmlWebpackPlugin({
-            template: helpers.root('src', 'index.html')
-        })
+        new HtmlWebpackPlugin(
+            {
+                template: helpers.root('src', 'index.html')
+            }
+        )
     ],
     stats: { // webpack 2 option
         colors: true,
@@ -57,7 +59,15 @@ module.exports = {
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'
+                use: {
+                    loader: 'babel-loader',
+                    query: {
+                        // This is a feature of `babel-loader` for webpack (not Babel itself).
+                        // It enables caching results in ./node_modules/.cache/babel-loader/
+                        // directory for faster rebuilds.
+                        cacheDirectory: true
+                    }
+                }
             },
             {
                 test: /\.html$/,
