@@ -3,6 +3,7 @@ const webpackMerge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const commonConfig = require('./webpack.config.common.js');
 const helpers = require('./helpers');
+const AssetsPlugin = require('assets-webpack-plugin');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 
@@ -11,6 +12,7 @@ module.exports = webpackMerge(commonConfig, {
     devtool: 'source-map',
     output: {
         path: helpers.root('dist'),
+        //path: __dirname + '/../dist',
         publicPath: './',
         filename: '[name].js',
         chunkFilename: '[id].chunk.js'
@@ -43,6 +45,11 @@ module.exports = webpackMerge(commonConfig, {
                 //minimize: false // workaround for ng2
                 minimize: false
             }
+        }),
+        new AssetsPlugin({
+            filename: 'assets.json',
+            path: helpers.root('dist'),
+            prettyPrint: true
         })
     ],
     module: {
@@ -54,7 +61,7 @@ module.exports = webpackMerge(commonConfig, {
                         fallback: 'style-loader',
                         use: [
                             //'style-loader',
-                            'css-loader?sourceMap&importLoaders=1',
+                            'css-loader',
                             'postcss-loader'
                         ],
                     }
@@ -66,7 +73,7 @@ module.exports = webpackMerge(commonConfig, {
                         fallback: 'style-loader',
                         use: [
                             //'style-loader',
-                            'css-loader?sourceMap&importLoaders=1',
+                            'css-loader?sourceMap=0',
                             // No CSS Modules for the moment, it does not play
                             // well with SSR
                             //'css-loader?sourceMap&modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',

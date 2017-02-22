@@ -1,0 +1,12 @@
+{
+  "vendor": {
+    "js": "./vendor.js"
+  },
+  "app": {
+    "js": "./app.js",
+    "css": "./app.cd55d4d3.css"
+  },
+  "polyfills": {
+    "js": "./polyfills.js"
+  }
+}

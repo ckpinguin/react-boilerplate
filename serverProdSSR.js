@@ -10,7 +10,7 @@ const ip = 'localhost';
 const port = 3000;
 
 /* Serve static */
-app.use('/public', express.static(__dirname + '/dist'));
+app.use('/', express.static(__dirname + '/dist'));
 //app.use(express.static(__dirname + '/dist/media'));
 
 /* Server render */

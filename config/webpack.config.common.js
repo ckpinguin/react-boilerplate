@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const helpers = require('./helpers');
 
 
@@ -97,13 +96,11 @@ module.exports = {
                     loader: 'url-loader',
                     query: {
                         limit: 10000,
-                        name: 'media/[name].[ext]'
-                        //name: 'static/media/[name].[hash:8].[ext]'
+                        //name: 'media/[name].[ext]'
+                        name: 'media/[name].[hash:8].[ext]'
                     }
                 }
             },
-            // CSS is handled differently in dev/prod so please have a look in
-            // the respective config files
         ]
     }
 };

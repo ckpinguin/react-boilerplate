@@ -70,7 +70,16 @@ module.exports = webpackMerge(commonConfig, {
                         loader: 'stylus-loader',
                         options: {
                             stylus: {
-                                use: [poststylus([ 'postcss-short', 'postcss-sorting', 'postcss-cssnext', 'rucksack-css' ])]
+                                use: [
+                                    poststylus(
+                                        [
+                                            'postcss-short',
+                                            'postcss-sorting',
+                                            'postcss-cssnext',
+                                            'rucksack-css'
+                                        ]
+                                    )
+                                ]
                             }
                         }
                     }
