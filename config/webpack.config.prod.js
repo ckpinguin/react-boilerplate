@@ -1,10 +1,18 @@
-var webpack = require('webpack');
-var webpackMerge = require('webpack-merge');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var commonConfig = require('./webpack.common.js');
-var helpers = require('./helpers');
+const webpack = require('webpack');
+const webpackMerge = require('webpack-merge');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const commonConfig = require('./webpack.config.common.js');
+const helpers = require('./helpers');
+const path = require('path');
 
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+
+const PATHS = {
+    src: path.resolve(__dirname, '../src'),
+    dist: path.resolve(__dirname, '../dist'),
+    publicPathDev: '/',
+    publicPathProd: './'
+};
 
 module.exports = webpackMerge(commonConfig, {
     devtool: 'source-map',
@@ -17,19 +25,13 @@ module.exports = webpackMerge(commonConfig, {
     plugins: [
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
+            minimize: true,
+            sourceMap: false,
+            //mangle: true,
             mangle: {
                 keep_fnames: true
             }
         }),
-        /*
-        new webpack.optimize.UglifyJsPlugin({
-            minimize: true,
-            sourceMap: false,
-            mangle: true,
-            compress: {
-                warnings: false
-            }
-        }),        */
         new ExtractTextPlugin('[name].[hash].css'),
         new webpack.DefinePlugin({
             'process.env': {
@@ -38,7 +40,8 @@ module.exports = webpackMerge(commonConfig, {
         }),
         new webpack.LoaderOptionsPlugin({
             htmlLoader: {
-                minimize: false // workaround for ng2
+                //minimize: false // workaround for ng2
+                minimize: true
             }
         })
     ]
