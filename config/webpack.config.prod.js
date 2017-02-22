@@ -11,9 +11,11 @@ module.exports = webpackMerge(commonConfig, {
     devtool: 'source-map',
     output: {
         path: helpers.root('dist'),
-        publicPath: '/',
-        filename: '[name].[hash].js',
-        chunkFilename: '[id].[hash].chunk.js'
+        publicPath: './',
+        filename: '[name].js',
+        chunkFilename: '[id].chunk.js'
+        //filename: '[name].[hash].js',
+        //chunkFilename: '[id].[hash].chunk.js'
     },
     plugins: [
         //BUG?: new webpack.NoEmitOnErrorsPlugin(), // stop building on failure
@@ -29,7 +31,8 @@ module.exports = webpackMerge(commonConfig, {
             }
         }),
         // This makes css-modules-require-hook a dependency (like babel-register)
-        new ExtractTextPlugin('[name].[hash].css'),
+        // Keep the hash here for quicker cache-reloading on SPA's
+        new ExtractTextPlugin('[name].[hash:8].css'),
         new webpack.DefinePlugin({
             'process.env': {
                 'ENV': JSON.stringify(ENV)
@@ -41,5 +44,39 @@ module.exports = webpackMerge(commonConfig, {
                 minimize: false
             }
         })
-    ]
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract(
+                    {
+                        fallback: 'style-loader',
+                        use: [
+                            //'style-loader',
+                            'css-loader?sourceMap&importLoaders=1',
+                            'postcss-loader'
+                        ],
+                    }
+                )
+            }, {
+                test: /\.styl$/,
+                use: ExtractTextPlugin.extract(
+                    {
+                        fallback: 'style-loader',
+                        use: [
+                            //'style-loader',
+                            'css-loader?sourceMap&importLoaders=1',
+                            // No CSS Modules for the moment, it does not play
+                            // well with SSR
+                            //'css-loader?sourceMap&modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
+                            //'css-loader/locals?module&localIdentName=[path]___[name]__[local]___[hash:base64:5]!postcss-loader!stylus-loader',
+                            'postcss-loader',
+                            'stylus-loader'
+                        ]
+                    }
+                )
+            }
+        ]
+    }
 });

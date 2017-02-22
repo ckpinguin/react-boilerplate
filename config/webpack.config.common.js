@@ -71,51 +71,39 @@ module.exports = {
                 test: /\.json$/,
                 loader: 'json-loader'
             },
+            //{
+            //    test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+            //    loader: 'file-loader?name=assets/[name].[hash].[ext]'
+            //},
+            // "file" loader makes sure those assets get served by WebpackDevServer.
+            // When you `import` an asset, you get its (virtual) filename.
+            // In production, they would get copied to the `build` folder.
+            // "url" loader works like "file" loader except that it embeds assets
+            // smaller than specified limit in bytes as data URLs to avoid requests.
+            // A missing `test` is equivalent to a match.
             {
                 test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
-                loader: 'file-loader?name=assets/[name].[hash].[ext]'
-            },
-            {
-                test: /\.css$/,
-                exclude: helpers.root('src', 'components'),
-                loader: ExtractTextPlugin.extract(
-                    {
-                        fallback: 'style-loader',
-                        use: [
-                            'css-loader?sourceMap',
-                            'postcss-loader'
-                        ]
+                exclude: [
+                    /\.html$/,
+                    /\.(js|jsx)$/,
+                    /\.css$/,
+                    /\.json$/,
+                    /\.svg$/,
+                    /node_modules/
+                ],
+                // use and query not allowed together, so we have to use a sub
+                // object
+                use: {
+                    loader: 'url-loader',
+                    query: {
+                        limit: 10000,
+                        name: 'media/[name].[ext]'
+                        //name: 'static/media/[name].[hash:8].[ext]'
                     }
-                )
+                }
             },
-            /**
-            * The second pattern filters for component-scoped styles and loads
-            * them as strings via the raw loader — which is what Angular expects
-            * to do with styles specified in a styleUrls metadata property.
-            */
-            {
-                test: /\.css$/,
-                include: helpers.root('src', 'components'),
-                loader: 'raw-loader'
-            },
-            {
-                test: /\.styl$/,
-                use: ExtractTextPlugin.extract(
-                    {
-                        fallback: 'style-loader',
-                        use: [
-                            //'style-loader',
-                            'css-loader?sourceMap&importLoaders=1',
-                            // No CSS Modules for the moment, it does not play
-                            // well with SSR
-                            //'css-loader?sourceMap&modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
-                            //'css-loader/locals?module&localIdentName=[path]___[name]__[local]___[hash:base64:5]!postcss-loader!stylus-loader',
-                            'postcss-loader',
-                            'stylus-loader'
-                        ]
-                    }
-                )
-            }
+            // CSS is handled differently in dev/prod so please have a look in
+            // the respective config files
         ]
     }
 };

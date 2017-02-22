@@ -39,14 +39,31 @@ $font_5 = "Droid Serif";
 $font_site = $font_0, $font_1, $font_3, $font_4, $font_5;
 $font_droid = $font_5, $font_1, $font_2, $font_3, $font_4;
 
+/* BEGIN OF GLOBAL STYLES */
 body {
     // background $url_1 no-repeat
     font-weight: 600;
     font-family: $font_site;
 }
 
-:global .alert {
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.alert {
     background-color: $navy_blue;
     color: red;
     font-weight: 900;
 }
+
+.emphasis {
+    font-style: italic;
+    font-family: 'Lora', serif;
+    text-transform: none;
+}
+
+.root {
+    padding: 20px 10px;
+}
+/* END OF GLOBAL STYLES */
