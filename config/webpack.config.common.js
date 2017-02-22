@@ -6,12 +6,13 @@ const helpers = require('./helpers');
 
 module.exports = {
     entry: {
-        polyfills: helpers.root('src/client/polyfills.js'),
-        vendor: helpers.root('src/client/vendor.js'),
-        app: helpers.root('src/client/main.js'),
+        polyfills: helpers.root('src', 'client', 'polyfills.js'),
+        vendor: helpers.root('src', 'client', 'vendor.js'),
+        app: helpers.root('src', 'client', 'main.js'),
     },
+    // Read: http://webpack.github.io/docs/configuration.html#resolve-extensions
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: ['', '.js']
     },
     externals: [],
     plugins: [
@@ -36,7 +37,7 @@ module.exports = {
         }),
         // inject the resulting js and cs files
         new HtmlWebpackPlugin({
-            template: 'src/index.html'
+            template: helpers.root('src', 'index.html')
         })
     ],
     stats: { // webpack 2 option

@@ -16,7 +16,7 @@ module.exports = webpackMerge(commonConfig, {
         chunkFilename: '[id].[hash].chunk.js'
     },
     plugins: [
-        new webpack.NoEmitOnErrorsPlugin(), // stop building on failure
+        //BUG?: new webpack.NoEmitOnErrorsPlugin(), // stop building on failure
         new webpack.optimize.UglifyJsPlugin({ // https://github.com/angular/angular/issues/10618
             minimize: true,
             sourceMap: false,
