@@ -4,20 +4,22 @@ const helpers = require('./helpers');
 
 
 module.exports = {
-    entry: {
+    /*
+entry: {
         polyfills: helpers.root('src', 'client', 'polyfills.js'),
         vendor: helpers.root('src', 'client', 'vendor.js'),
         app: helpers.root('src', 'client', 'main.js'),
-    },
+    },*/
     externals: [],
     plugins: [
-        // Workaround for angular/angular#11580
+        /*
+ // Workaround for angular/angular#11580
         new webpack.ContextReplacementPlugin(
           // The (\\|\/) piece accounts for path separators in *nix and Windows
             /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
             helpers.root('./src'), // location of your src
             {} // a map of your routes
-        ),
+        ), */
         /**
         * Of course the application code imports vendor code. Webpack itself is
         * not smart enough to keep the vendor code out of the app.js bundle.

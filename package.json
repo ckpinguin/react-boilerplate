@@ -46,6 +46,7 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-3": "^6.22.0",
     "browser-sync": "^2.18.8",
+    "browser-sync-webpack-plugin": "^1.1.4",
     "concurrently": "^3.3.0",
     "core-js": "^2.4.1",
     "cross-env": "^3.1.4",

@@ -8,6 +8,12 @@ const poststylus = require('poststylus');
 
 module.exports = webpackMerge(commonConfig, {
     devtool: 'cheap-module-eval-source-map',
+    entry: {
+        app: [
+            'webpack-hot-middleware/client',
+            helpers.root('src', 'client', 'main.js'),
+        ]
+    },
     output: {
         path: helpers.root('dist'),
         //publicPath: 'http://localhost:8080/',
