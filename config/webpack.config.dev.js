@@ -4,19 +4,21 @@ const commonConfig = require('./webpack.config.common.js');
 const helpers = require('./helpers');
 const webpack = require('webpack');
 const poststylus = require('poststylus');
-
+//var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 
 module.exports = webpackMerge(commonConfig, {
     devtool: 'cheap-module-eval-source-map',
     entry: {
         app: [
+            'webpack/hot/dev-server',
             'webpack-hot-middleware/client',
-            helpers.root('src', 'client', 'main.js'),
+            //'webpack-dev-server/client',
+            //'webpack/hot/only-dev-server',
+            helpers.root('src', 'client', 'main.js')
         ]
     },
     output: {
         path: helpers.root('dist'),
-        //publicPath: 'http://localhost:8080/',
         publicPath: '/',
         filename: '[name].js',
         chunkFilename: '[id].chunk.js'
@@ -31,6 +33,19 @@ module.exports = webpackMerge(commonConfig, {
     },
     module: {
         rules: [
+            {
+                test: /\.js$/,
+                exclude: [
+                    /node_modules/
+                ],
+                loader: 'babel-loader',
+                query: {
+                    // This is a feature of `babel-loader` for webpack (not Babel itself).
+                    // It enables caching results in ./node_modules/.cache/babel-loader/
+                    // directory for faster rebuilds.
+                    cacheDirectory: true
+                }
+            },
             {
                 test: /\.css$/,
                 loaders: [

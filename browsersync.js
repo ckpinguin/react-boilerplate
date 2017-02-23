@@ -17,7 +17,7 @@ var bundler = webpack(webpackConfig);
  */
 browserSync({
     server: {
-        baseDir: 'src',
+        baseDir: 'src/client',
 
         middleware: [
             webpackDevMiddleware(bundler, {
@@ -41,5 +41,5 @@ browserSync({
 
     // no need to watch '*.js' here, webpack will take care of it for us,
     // including full page reloads if HMR won't work
-    files: ['app/css/*.css', 'app/*.html']
+    files: ['src/client/*.css', 'src/*.html']
 });
