@@ -6,7 +6,7 @@ import selfie from '../../assets/selfie.jpg';
 export default function ProfilePage() {
     return <div>
         <NavBar/>
-        <h1>All About Me or so..., Mamma Mio...!</h1>
+        <h1>All About Me or soooo..., Mamma Miaaa...!</h1>
         <p>I like movies and blah blah blah blah blah</p>
         <div>
             <img src={selfie}/>

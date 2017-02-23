@@ -26,9 +26,11 @@ module.exports = {
         // inject the resulting js and cs files
         new HtmlWebpackPlugin(
             {
-                template: helpers.root('src', 'index.html')
+                template: helpers.root('src', 'client', 'index.html')
             }
         )
+
+
     ],
     stats: { // webpack 2 option
         colors: true,
@@ -55,10 +57,13 @@ module.exports = {
                     }
                 }
             },
+            /*
             {
                 test: /\.html$/,
                 loader: 'html-loader'
-            },
+            },            */
+
+
             {
                 test: /\.json$/,
                 loader: 'json-loader'
