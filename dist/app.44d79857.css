@@ -1,0 +1,26 @@
+/* BEGIN OF GLOBAL STYLES */
+body {
+  background-color: #add8e6;
+  font-weight: 600;
+  font-family: "Lato", "Helvetica Neue", "Arial", "sans-serif", "Droid Serif";
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.alert {
+  background-color: #000080;
+  color: #f00;
+  font-weight: 900;
+}
+.emphasis {
+  font-style: italic;
+  font-family: 'Lora', serif;
+  text-transform: none;
+}
+.root {
+  padding: 20px 10px;
+}
+/* END OF GLOBAL STYLES */
+
+/*# sourceMappingURL=app.44d79857.css.map*/
